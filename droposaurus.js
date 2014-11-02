@@ -61,7 +61,7 @@
 						//set up the proper display of the select and list elements
 						el.wrap('<div class="dropdown-wrapper"></div>');
 						el.after(catchDropdownHtml);
-						// el.addClass('hidden');
+						el.addClass('hidden');
 
 						//Add the blank option if allowed
 						if(el.attr('allow-empty')=="true"){
