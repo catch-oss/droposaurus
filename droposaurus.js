@@ -49,114 +49,116 @@
 						// call them like so: this.yourOtherFunction(this.element, this.options).
 
 						var el = this.jqElem;
-						var par = el.parent();
+						el.each(function(){
+							var el = $(this);
 
-						var catchDropdownHtml = '<label' + (el.data('error') ? ' class="error"' : '') + '><span class="span-label">'+el.data('label')+'</span>'+
-							'<div class="btn-dd">'+
-									'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
-									'<ul class="btn-dd-options">'+
-									'</ul>'+
-							'</div></label>'
+							var catchDropdownHtml = '<label' + (el.data('error') ? ' class="error"' : '') + '><span class="span-label">'+el.data('label')+'</span>'+
+								'<div class="btn-dd">'+
+										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
+										'<ul class="btn-dd-options">'+
+										'</ul>'+
+								'</div></label>'
 
-						//set up the proper display of the select and list elements
-						el.wrap('<div class="dropdown-wrapper"></div>');
-						el.after(catchDropdownHtml);
-						el.addClass('hidden');
+							//set up the proper display of the select and list elements
+							el.wrap('<div class="dropdown-wrapper"></div>');
+							var par = el.parent();
+							el.after(catchDropdownHtml);
+							el.addClass('hidden');
 
-						//Add the blank option if allowed
-						if(el.attr('allow-empty')=="true"){
-							el.prepend('<option value=""></option>');
-							par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="">&nbsp;</a></li>')
-						}
-
-						//populate the list with the select items
-						el.find('option').each(function(){
-							if($(this).val()!=''){
-								par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="'+$(this).val()+'">'+$(this).text()+'</a></li>')
+							//Add the blank option if allowed
+							if(el.attr('allow-empty')=="true"){
+								el.prepend('<option value=""></option>');
+								par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="">&nbsp;</a></li>')
 							}
-						});
 
-						//Add the default blank field if no empty is allowed
-						if(el.attr('allow-empty')!="true"){
-							el.append('<option value=""></option>');
-						}
+							//populate the list with the select items
+							el.find('option').each(function(){
+								if($(this).val()!=''){
+									par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="'+$(this).val()+'">'+$(this).text()+'</a></li>')
+								}
+							});
 
-						//Add the 'first' class to the first list item
-						par.find('ul li').first().addClass('first');
+							//Add the default blank field if no empty is allowed
+							if(el.attr('allow-empty')!="true"){
+								el.append('<option value=""></option>');
+							}
 
-						//Preselect an option if one is specified, else the first
-						sel = el.data('selected') ? el.find('option[value="'+selected+'"]') : el.find('option').first()
-						sel.prop('selected',true);
-						par.find('.btn-dd-select span').text(sel.text() || el.data('placeholder') || '&nbsp;');
+							//Add the 'first' class to the first list item
+							par.find('ul li').first().addClass('first');
 
-						//When clicking on the outer button thing, make it open and close the menu
-						par.find('.btn-dd').click(function(e){
-							e.preventDefault();
-							e.stopPropagation();
-						  $(this).toggleClass('active');
+							//Preselect an option if one is specified, else the first
+							sel = el.data('selected') ? el.find('option[value="'+selected+'"]') : el.find('option').first()
+							sel.prop('selected',true);
+							par.find('.btn-dd-select span').text(sel.text() || el.data('placeholder') || '&nbsp;');
+
+							//When clicking on the outer button thing, make it open and close the menu
+							par.find('.btn-dd').click(function(e){
+								e.preventDefault();
+								e.stopPropagation();
+								$(this).toggleClass('active');
+							})
+
+							//When clicking on the menu items, select that menu item and close the menu
+							par.find('li a').click(function(e){
+								e.preventDefault();
+								el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
+								par.find('.btn-dd-select span').text($(this).text());
+							})
+
+							//When clicking off the menu, close the menu
+							$('html').click(function(e){
+								par.find('.btn-dd').removeClass('active');
+							})
+
+							//tab, enter, arrow keys
+							var focused = -1
+							$(document).keydown(function(e){
+								//down = 40
+								if(e.keyCode == 40){
+									if(par.find('.btn-dd.active').length){
+										e.preventDefault();
+										var options = par.find('.btn-dd-option a');
+										if(focused < options.length-1){ focused++; }
+										var focusedElem = options[focused]
+										focusedElem.focus()
+										el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
+									}
+								}
+								//up = 38
+								else if(e.keyCode == 38){
+									if(par.find('.btn-dd.active').length){
+										e.preventDefault();
+										var options = par.find('.btn-dd-option a');
+										if(focused > 0){ focused--; }
+										var focusedElem = options[focused]
+										focusedElem.focus()
+										el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
+									}
+								}
+								//tab
+								else if(e.keyCode == 9){
+									var active = par.find('.btn-dd.active');
+									if(active.length){
+										e.preventDefault();
+										active.removeClass('active');
+										active.find('a').addClass('populated');
+										active.find('a').focus();
+										active.find('a span').text(el.val());
+									}
+								}
+								//enter
+								else if(e.keyCode == 13){
+									var active = par.find('.btn-dd.active');
+									if(active.length){
+										e.preventDefault();
+										active.removeClass('active');
+										active.find('a').addClass('populated');
+										active.find('a').focus();
+										active.find('a span').text(el.val());
+									}
+								}
+							});
 						})
-
-						//When clicking on the menu items, select that menu item and close the menu
-						par.find('li a').click(function(e){
-							e.preventDefault();
-							el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
-							par.find('.btn-dd-select span').text($(this).text());
-						})
-
-						//When clicking off the menu, close the menu
-						$('html').click(function(e){
-						  par.find('.btn-dd').removeClass('active');
-						})
-
-						//tab, enter, arrow keys
-						var focused = -1
-						$(document).keydown(function(e){
-							//down = 40
-							if(e.keyCode == 40){
-								if(par.find('.btn-dd.active').length){
-									e.preventDefault();
-									var options = par.find('.btn-dd-option a');
-									if(focused < options.length-1){ focused++; }
-									var focusedElem = options[focused]
-									focusedElem.focus()
-									el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
-								}
-							}
-							//up = 38
-							else if(e.keyCode == 38){
-								if(par.find('.btn-dd.active').length){
-									e.preventDefault();
-									var options = par.find('.btn-dd-option a');
-									if(focused > 0){ focused--; }
-									var focusedElem = options[focused]
-									focusedElem.focus()
-									el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
-								}
-							}
-							//tab
-							else if(e.keyCode == 9){
-								var active = par.find('.btn-dd.active');
-								if(active.length){
-									e.preventDefault();
-									active.removeClass('active');
-									active.find('a').addClass('populated');
-									active.find('a').focus();
-									active.find('a span').text(el.val());
-								}
-							}
-							//enter
-							else if(e.keyCode == 13){
-								var active = par.find('.btn-dd.active');
-								if(active.length){
-									e.preventDefault();
-									active.removeClass('active');
-									active.find('a').addClass('populated');
-									active.find('a').focus();
-									active.find('a span').text(el.val());
-								}
-							}
-						});
-
 				}
 		};
 
