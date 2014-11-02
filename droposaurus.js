@@ -87,7 +87,7 @@
 							par.find('ul li').first().addClass('first');
 
 							//Preselect an option if one is specified, else the first
-							sel = el.data('selected') ? el.find('option[value="'+selected+'"]') : el.find('option').first()
+							sel = el.data('selected') ? el.find('option[value="'+el.data('selected')+'"]') : el.find('option').first()
 							sel.prop('selected',true);
 							par.find('.btn-dd-select span').text(sel.text() || el.data('placeholder') || '&nbsp;');
 
