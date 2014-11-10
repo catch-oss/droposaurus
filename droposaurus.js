@@ -55,8 +55,11 @@
 							var catchDropdownHtml = '<label' + (el.data('error') ? ' class="error"' : '') + '><span class="span-label">'+el.data('label')+'</span>'+
 								'<div class="btn-dd">'+
 										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
-										'<ul class="btn-dd-options">'+
-										'</ul>'+
+										'<div class="btn-dd-options">'+
+											'<a class="btn-dd-close">Close</a>'+
+											'<ul>'+
+											'</ul>'+
+										'</div>'+
 								'</div></label>'
 
 							//set up the proper display of the select and list elements
