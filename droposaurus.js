@@ -56,7 +56,10 @@
 								'<div class="btn-dd">'+
 										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
 										'<div class="btn-dd-options">'+
-											'<a class="btn-dd-close">Close</a>'+
+											'<div class="btn-dd-header">'+
+											  el.data('label') +
+												' <a class="btn-dd-close">Close</a>'+
+											'</div>'+
 											'<ul>'+
 											'</ul>'+
 										'</div>'+
