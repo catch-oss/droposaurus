@@ -1,13 +1,3 @@
-/*
- *  jQuery Boilerplate - v3.3.1
- *  A jump-start for jQuery plugins development.
- *  http://jqueryboilerplate.com
- *
- *  Made by Zeno Rocha
- *  Under MIT License
- */
-// the semi-colon before function invocation is a safety net against concatenated
-// scripts and/or other plugins which may not be closed properly.
 ;(function ( $, window, document, undefined ) {
 
 		// undefined is used here as the undefined global variable in ECMAScript 3 is
@@ -47,6 +37,8 @@
 						// and this.options
 						// you can add more functions like the one below and
 						// call them like so: this.yourOtherFunction(this.element, this.options).
+
+						addBody();
 
 						var el = this.jqElem;
 						el.each(function(){
@@ -106,6 +98,7 @@
 									$(this).toggleClass('selected',selected==$(this).data('value'));
 								});
 								$(this).toggleClass('active');
+								$('html').toggleClass('flyin-active');
 								$(this).find('a').first().addClass('populated');
 							})
 
@@ -119,6 +112,7 @@
 							//When clicking off the menu, close the menu
 							$('html').click(function(e){
 								par.find('.btn-dd').removeClass('active');
+								$('html').removeClass('flyin-active');
 							})
 
 							//tab, enter, arrow keys
@@ -152,6 +146,7 @@
 									if(active.length){
 										e.preventDefault();
 										active.removeClass('active');
+										$('html').removeClass('flyin-active');
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
 										active.find('a span').first().text(el.val());
@@ -163,6 +158,7 @@
 									if(active.length){
 										e.preventDefault();
 										active.removeClass('active');
+										$('html').removeClass('flyin-active');
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
 										active.find('a span').first().text(el.val());
