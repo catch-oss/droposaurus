@@ -54,10 +54,10 @@
 
 							var catchDropdownHtml = '<label' + (el.data('error') ? ' class="error"' : '') + '><span class="span-label">'+el.data('label')+'</span>'+
 								'<div class="btn-dd">'+
-										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
+										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down'+ (el.data('selected') ? ' populated' : '') +'" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
 										'<div class="btn-dd-options">'+
 											'<div class="btn-dd-header">'+
-											  el.data('label') +
+												el.data('label') +
 												' <a class="btn-dd-close">Close</a>'+
 											'</div>'+
 											'<ul>'+
@@ -80,7 +80,7 @@
 							//populate the list with the select items
 							el.find('option').each(function(){
 								if($(this).val()!=''){
-									par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="'+$(this).val()+'">'+$(this).text()+'</a></li>')
+									par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link'+ (el.data('selected')==$(this).val() ? ' selected' : '') +'" href="" tabindex="-1" data-value="'+$(this).val()+'">'+$(this).text()+'</a></li>')
 								}
 							});
 
@@ -101,7 +101,12 @@
 							par.find('.btn-dd').click(function(e){
 								e.preventDefault();
 								e.stopPropagation();
+								var selected = el.val();
+								$(this).find('li a').each(function(){
+									$(this).toggleClass('selected',selected==$(this).data('value'));
+								});
 								$(this).toggleClass('active');
+								$(this).find('a').first().addClass('populated');
 							})
 
 							//When clicking on the menu items, select that menu item and close the menu
