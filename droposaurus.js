@@ -152,9 +152,9 @@
 									if(active.length){
 										e.preventDefault();
 										active.removeClass('active');
-										active.find('a').addClass('populated');
-										active.find('a').focus();
-										active.find('a span').text(el.val());
+										active.find('a').first().addClass('populated');
+										active.find('a').first().focus();
+										active.find('a span').first().text(el.val());
 									}
 								}
 								//enter
@@ -163,9 +163,9 @@
 									if(active.length){
 										e.preventDefault();
 										active.removeClass('active');
-										active.find('a').addClass('populated');
-										active.find('a').focus();
-										active.find('a span').text(el.val());
+										active.find('a').first().addClass('populated');
+										active.find('a').first().focus();
+										active.find('a span').first().text(el.val());
 									}
 								}
 							});
