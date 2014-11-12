@@ -64,8 +64,8 @@
 							el.addClass('hidden');
 
 							//Add the blank option if allowed
+							el.prepend('<option value=""></option>');
 							if(el.attr('allow-empty')=="true"){
-								el.prepend('<option value=""></option>');
 								par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="">&nbsp;</a></li>')
 							}
 
@@ -75,14 +75,6 @@
 									par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link'+ (el.data('selected')==$(this).val() ? ' selected' : '') +'" href="" tabindex="-1" data-value="'+$(this).val()+'">'+$(this).text()+'</a></li>')
 								}
 							});
-
-							//Add the default blank field if no empty is allowed
-							if(el.attr('allow-empty')!="true"){
-								el.append('<option value=""></option>');
-							}
-
-							//Add the 'first' class to the first list item
-							par.find('ul li').first().addClass('first');
 
 							//Preselect an option if one is specified, else the first
 							sel = el.data('selected') ? el.find('option[value="'+el.data('selected')+'"]') : el.find('option').first()
