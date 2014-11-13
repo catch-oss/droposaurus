@@ -90,7 +90,7 @@
 									$(this).toggleClass('selected',selected==$(this).data('value'));
 								});
 								$(this).toggleClass('active');
-								$('html').toggleClass('flyin-active');
+								$('.body').toggleClass('no-overflow');
 								$(this).find('a').first().addClass('populated');
 							})
 
@@ -104,7 +104,7 @@
 							//When clicking off the menu, close the menu
 							$('html').click(function(e){
 								par.find('.btn-dd').removeClass('active');
-								$('html').removeClass('flyin-active');
+								$('.body').removeClass('no-overflow');
 							})
 
 							//tab, enter, arrow keys
@@ -138,7 +138,7 @@
 									if(active.length){
 										e.preventDefault();
 										active.removeClass('active');
-										$('html').removeClass('flyin-active');
+										$('.body').removeClass('no-overflow');
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
 										active.find('a span').first().text(el.val());
@@ -150,7 +150,7 @@
 									if(active.length){
 										e.preventDefault();
 										active.removeClass('active');
-										$('html').removeClass('flyin-active');
+										$('.body').removeClass('no-overflow');
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
 										active.find('a span').first().text(el.val());
