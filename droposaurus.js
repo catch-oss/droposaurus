@@ -57,10 +57,13 @@
 						el.each(function(){
 							var el = $(this);
 
-							var catchDropdownHtml = '<label class="' + (el.data('error ') ? 'error' : '') + el.attr('class') + '"><span class="span-label">'+el.data('label')+'</span>'+
+							var classList = el.attr('class') || '';
+							classList = classList.replace('select-invisible','');
+
+							var catchDropdownHtml = '<label class="' + (el.data('error ') ? 'error' : '') + classList + '"><span class="span-label">'+(el.data('label') || '')+'</span>'+
 								'<div class="btn-dd">'+
 										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down'+ (el.data('selected') ? ' populated' : '') +'" tabindex="10">'+
-										'<span>'+el.data('placeholder')+'</span>'+
+										'<span class="main">'+el.data('placeholder')+'</span>'+
 										(el.data('subtext') ? ("<span class='sub'>"+el.data('subtext')+"</span>") : "") +'</a>'+
 										'<div class="btn-dd-options">'+
 											'<div class="btn-dd-header">'+
@@ -87,14 +90,23 @@
 							//populate the list with the select items
 							el.find('option').each(function(){
 								if($(this).val()!=''){
-									par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link'+ (el.data('selected')==$(this).val() ? ' selected' : '') +'" href="" tabindex="-1" data-value="'+$(this).val()+'">'+$(this).text()+'</a></li>')
+									par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link'+ (el.data('selected')==$(this).val() ? ' selected' : '') +'" href="" tabindex="-1" data-value="'+$(this).val()+'">'+
+									'<span class="main">'+$(this).text()+'</span>'+
+									( $(this).data('subtext') ? '<span class="sub">' + $(this).data('subtext') + '</span>' : '' )+
+									'</a></li>')
 								}
 							});
 
 							//Preselect an option if one is specified, else the first
 							sel = el.data('selected') ? el.find('option[value="'+el.data('selected')+'"]') : el.find('option').first()
 							sel.prop('selected',true);
-							par.find('.btn-dd-select span').first().text(sel.text() || el.data('placeholder') || '&nbsp;');
+							par.find('.btn-dd-select .main').first().text(sel.text() || el.data('placeholder') || '&nbsp;');
+							if(sel.data('subtext')){
+								if(par.find('.btn-dd-select .sub').length == 0){
+									par.find('.btn-dd-select').append('<span class="sub"></span>')
+								}
+								par.find('.btn-dd-select .sub').first().text( sel.data('subtext') );
+							}
 
 							//When clicking on the outer button thing, make it open and close the menu
 							par.find('.btn-dd').click(function(e){
@@ -113,7 +125,10 @@
 							par.find('li a').click(function(e){
 								e.preventDefault();
 								el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
-								par.find('.btn-dd-select span').first().text($(this).text());
+								par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
+								if($(this).data('subtext')){
+									par.find('.btn-dd-select .sub').first().text( $(this).data('subtext') );
+								}
 							})
 
 							//When clicking off the menu, close the menu
@@ -151,24 +166,38 @@
 								else if(e.keyCode == 9){
 									var active = par.find('.btn-dd.active');
 									if(active.length){
+										var sel = el.find('option[value="'+el.val()+'"]');
 										e.preventDefault();
 										active.removeClass('active');
 										$('.body').removeClass('no-overflow');
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
-										active.find('a span').first().text(el.val());
+										active.find('a .main').first().text(sel.text());
+										if(sel.data('subtext')){
+											if(active.find('a .sub').length == 0){
+												active.find('a').append('<span class="sub"></span>')
+											}
+											active.find('a .sub').first().text( sel.data('subtext') );
+										}
 									}
 								}
 								//enter
 								else if(e.keyCode == 13){
 									var active = par.find('.btn-dd.active');
 									if(active.length){
+										var sel = el.find('option[value="'+el.val()+'"]');
 										e.preventDefault();
 										active.removeClass('active');
 										$('.body').removeClass('no-overflow');
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
-										active.find('a span').first().text(el.val());
+										active.find('a .main').first().text(sel.text());
+										if(sel.data('subtext')){
+											if(active.find('a .sub').length == 0){
+												active.find('a').append('<span class="sub"></span>')
+											}
+											active.find('a .sub').first().text( sel.data('subtext') );
+										}
 									}
 								}
 							});
