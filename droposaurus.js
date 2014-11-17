@@ -57,9 +57,11 @@
 						el.each(function(){
 							var el = $(this);
 
-							var catchDropdownHtml = '<label' + (el.data('error') ? ' class="error"' : '') + '><span class="span-label">'+el.data('label')+'</span>'+
+							var catchDropdownHtml = '<label class="' + (el.data('error ') ? 'error' : '') + el.attr('class') + '"><span class="span-label">'+el.data('label')+'</span>'+
 								'<div class="btn-dd">'+
-										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down'+ (el.data('selected') ? ' populated' : '') +'" tabindex="10"><span>'+el.data('placeholder')+'</span></a>'+
+										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down'+ (el.data('selected') ? ' populated' : '') +'" tabindex="10">'+
+										'<span>'+el.data('placeholder')+'</span>'+
+										(el.data('subtext') ? ("<span class='sub'>"+el.data('subtext')+"</span>") : "") +'</a>'+
 										'<div class="btn-dd-options">'+
 											'<div class="btn-dd-header">'+
 												el.data('label') +
@@ -92,7 +94,7 @@
 							//Preselect an option if one is specified, else the first
 							sel = el.data('selected') ? el.find('option[value="'+el.data('selected')+'"]') : el.find('option').first()
 							sel.prop('selected',true);
-							par.find('.btn-dd-select span').text(sel.text() || el.data('placeholder') || '&nbsp;');
+							par.find('.btn-dd-select span').first().text(sel.text() || el.data('placeholder') || '&nbsp;');
 
 							//When clicking on the outer button thing, make it open and close the menu
 							par.find('.btn-dd').click(function(e){
@@ -111,7 +113,7 @@
 							par.find('li a').click(function(e){
 								e.preventDefault();
 								el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
-								par.find('.btn-dd-select span').text($(this).text());
+								par.find('.btn-dd-select span').first().text($(this).text());
 							})
 
 							//When clicking off the menu, close the menu

@@ -8,7 +8,8 @@ stuff.
 ```html
 <form>
   <fieldset>
-    <select class="catch-dropdown" data-label="Selection"
+    <select class="catch-dropdown other-class" data-label="Selection"
+      data-subtext="subtext"
       data-placeholder="Please select one" name="select-name"
       data-error="false" allow-empty="true">
         <option value="option 1">Option 1</option>
