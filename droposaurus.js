@@ -124,10 +124,13 @@
 							//When clicking on the menu items, select that menu item and close the menu
 							par.find('li a').click(function(e){
 								e.preventDefault();
-								el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
+								var sel = el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
 								par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
-								if($(this).data('subtext')){
-									par.find('.btn-dd-select .sub').first().text( $(this).data('subtext') );
+								if(sel.data('subtext')){
+									if(par.find('.btn-dd-select .sub').length == 0){
+										par.find('.btn-dd-select').append('<span class="sub"></span>')
+									}
+									par.find('.btn-dd-select .sub').first().text( sel.data('subtext') );
 								}
 							})
 
