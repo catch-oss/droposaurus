@@ -112,6 +112,7 @@
 							par.find('.btn-dd').click(function(e){
 								e.preventDefault();
 								e.stopPropagation();
+								el.trigger('probable_change');
 								var selected = el.val();
 								$(this).find('li a').each(function(){
 									$(this).toggleClass('selected',selected==$(this).data('value'));
