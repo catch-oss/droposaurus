@@ -101,12 +101,10 @@
 							sel = el.data('selected') ? el.find('option[value="'+el.data('selected')+'"]') : el.find('option').first()
 							sel.prop('selected',true);
 							par.find('.btn-dd-select .main').first().text(sel.text() || el.data('placeholder') || '&nbsp;');
-							if(sel.data('subtext')){
-								if(par.find('.btn-dd-select .sub').length == 0){
-									par.find('.btn-dd-select').append('<span class="sub"></span>')
-								}
-								par.find('.btn-dd-select .sub').first().text( sel.data('subtext') );
+							if(par.find('.btn-dd-select .sub').length == 0){
+								par.find('.btn-dd-select').append('<span class="sub"></span>')
 							}
+							par.find('.btn-dd-select .sub').first().text( sel.data('subtext') || '' );
 
 							//When clicking on the outer button thing, make it open and close the menu
 							par.find('.btn-dd').click(function(e){
@@ -127,12 +125,11 @@
 								e.preventDefault();
 								var sel = el.find('option[value="'+$(this).data('value')+'"]').prop('selected',true);
 								par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
-								if(sel.data('subtext')){
-									if(par.find('.btn-dd-select .sub').length == 0){
-										par.find('.btn-dd-select').append('<span class="sub"></span>')
-									}
-									par.find('.btn-dd-select .sub').first().text( sel.data('subtext') );
+								if(par.find('.btn-dd-select .sub').length == 0){
+									par.find('.btn-dd-select').append('<span class="sub"></span>')
 								}
+								par.find('.btn-dd-select .sub').first().text( sel.data('subtext') || '' );
+
 							})
 
 							//When clicking off the menu, close the menu
@@ -177,12 +174,10 @@
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
 										active.find('a .main').first().text(sel.text());
-										if(sel.data('subtext')){
-											if(active.find('a .sub').length == 0){
-												active.find('a').append('<span class="sub"></span>')
-											}
-											active.find('a .sub').first().text( sel.data('subtext') );
+										if(active.find('a .sub').length == 0){
+											active.find('a').append('<span class="sub"></span>')
 										}
+										active.find('a .sub').first().text( sel.data('subtext') || '' );
 									}
 								}
 								//enter
@@ -196,12 +191,10 @@
 										active.find('a').first().addClass('populated');
 										active.find('a').first().focus();
 										active.find('a .main').first().text(sel.text());
-										if(sel.data('subtext')){
-											if(active.find('a .sub').length == 0){
-												active.find('a').append('<span class="sub"></span>')
-											}
-											active.find('a .sub').first().text( sel.data('subtext') );
+										if(active.find('a .sub').length == 0){
+											active.find('a').append('<span class="sub"></span>')
 										}
+										active.find('a .sub').first().text( sel.data('subtext') );
 									}
 								}
 							});
