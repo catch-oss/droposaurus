@@ -60,7 +60,7 @@
 							var classList = el.attr('class') || '';
 							classList = classList.replace('select-invisible','');
 
-							var catchDropdownHtml = '<label class="' + (el.data('error ') ? 'error' : '') + classList + '"><span class="span-label">'+(!el.data('mobile-only-label') && el.data('label') || '')+'</span>'+
+							var catchDropdownHtml = '<label class="' + (el.data('error ') ? 'error' : '') + classList + '"><span class="span-label'+ (el.data('hideLabel') ? ' hidden' : '')+'">'+(!el.data('mobile-only-label') && el.data('label') || '')+'</span>'+
 								'<div class="btn-dd">'+
 										'<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down'+ (el.data('selected') ? ' populated' : '') +'" tabindex="10">'+
 										'<span class="main">'+el.data('placeholder')+'</span>'+
