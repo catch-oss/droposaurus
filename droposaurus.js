@@ -100,6 +100,7 @@
                             //Preselect an option if one is specified, else the first
                             sel = el.data('selected') ? el.find('option[value="'+el.data('selected')+'"]') : el.find('option').first()
                             sel.prop('selected',true);
+                            el.trigger('change');
                             par.find('.btn-dd-select .main').first().text(sel.text() || el.data('placeholder') || '&nbsp;');
                             if(par.find('.btn-dd-select .sub').length == 0){
                                 par.find('.btn-dd-select').append('<span class="sub"></span>')
@@ -132,7 +133,7 @@
                                     par.find('.btn-dd-select').append('<span class="sub"></span>')
                                 }
                                 par.find('.btn-dd-select .sub').first().text( sel.data('subtext') || '' );
-
+                                el.trigger('change');
                             })
 
                             //When clicking off the menu, close the menu
@@ -153,6 +154,7 @@
                                         var focusedElem = options[focused]
                                         focusedElem.focus()
                                         el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
+                                        el.trigger('change');
                                     }
                                 }
                                 //up = 38
@@ -164,6 +166,7 @@
                                         var focusedElem = options[focused]
                                         focusedElem.focus()
                                         el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
+                                        el.trigger('change');
                                     }
                                 }
                                 //tab
