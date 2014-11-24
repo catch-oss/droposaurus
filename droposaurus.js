@@ -108,6 +108,9 @@
 
 							//When clicking on the outer button thing, make it open and close the menu
 							par.find('.btn-dd').click(function(e){
+								if(!$(this).hasClass('active')){
+									$('.btn-dd').removeClass('active');
+								}
 								e.preventDefault();
 								e.stopPropagation();
 								el.trigger('probable_change');
