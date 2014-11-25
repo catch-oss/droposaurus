@@ -99,6 +99,7 @@
                             focusedElem.focus()
                         }
                     }
+                    //esc = 27
                     else if(e.keyCode == 27){
                         if(el.hasClass('active')){
                             $('.simple-dd').removeClass('active');
