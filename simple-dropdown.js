@@ -99,6 +99,12 @@
                             focusedElem.focus()
                         }
                     }
+                    else if(e.keyCode == 27){
+                        if(el.hasClass('active')){
+                            $('.simple-dd').removeClass('active');
+                            $('.body').toggleClass('no-overflow');
+                        }
+                    }
                 });
             });
         }
