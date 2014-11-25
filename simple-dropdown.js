@@ -60,7 +60,8 @@
                 //When clicking on the outer button thing, make it open and close the menu
                 el.find('a').first().click(function(e){
                     if(!el.hasClass('active')){
-                        outEl.removeClass('active');
+                        $('.simple-dd').removeClass('active');
+                        $('.body').toggleClass('no-overflow');
                     }
                     e.preventDefault();
                     e.stopPropagation();
@@ -71,7 +72,7 @@
 
                 //When clicking off the menu, close the menu
                 $('html').click(function(e){
-                    outEl.removeClass('active');
+                    $('.simple-dd').removeClass('active');
                     $('.body').removeClass('no-overflow');
                 })
 
