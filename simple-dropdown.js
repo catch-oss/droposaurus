@@ -61,19 +61,16 @@
                 el.find('a').first().click(function(e){
                     if(!el.hasClass('active')){
                         $('.simple-dd').removeClass('active');
-                        $('.body').toggleClass('no-overflow');
                     }
                     e.preventDefault();
                     e.stopPropagation();
                     el.trigger('probable_change');
                     el.toggleClass('active');
-                    $('.body').toggleClass('no-overflow');
                 })
 
                 //When clicking off the menu, close the menu
                 $('html').click(function(e){
                     $('.simple-dd').removeClass('active');
-                    $('.body').removeClass('no-overflow');
                 })
 
                 //tab, enter, arrow keys
@@ -103,7 +100,6 @@
                     else if(e.keyCode == 27){
                         if(el.hasClass('active')){
                             $('.simple-dd').removeClass('active');
-                            $('.body').toggleClass('no-overflow');
                         }
                     }
                 });
