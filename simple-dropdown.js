@@ -55,17 +55,37 @@
 
             var el = this.jqElem;
             var outEl = this.jqElem;
+
+
             el.each(function(){
                 var el = $(this);
+
+                var w = el.find('ul');
+
+                y = w.parent();
+
+                var x = w.remove();
+
+                $('.body').append(x);
+                x.wrap('<div class="simple-dd" id="'+el.data('id')+'"></div>');
+                x.parent().css({
+                    position: 'absolute',
+                    top: y.offset().top+y.height(),
+                    left: y.offset().left
+                });
+
+
                 //When clicking on the outer button thing, make it open and close the menu
                 el.find('a').first().click(function(e){
-                    if(!el.hasClass('active')){
-                        $('.simple-dd').removeClass('active');
-                    }
                     e.preventDefault();
                     e.stopPropagation();
+                    $('.simple-dd').removeClass('active');
+                    if(el.hasClass('active')){
+                        return
+                    }
                     el.trigger('probable_change');
-                    el.toggleClass('active');
+                    $('#'+el.data('id')).toggleClass('active');
+                    console.log('asdf','#'+el.data('id'),$('#'+el.data('id')).length);
                 })
 
                 //When clicking off the menu, close the menu
