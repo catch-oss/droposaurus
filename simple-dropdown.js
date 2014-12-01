@@ -75,17 +75,19 @@
                 });
 
 
+                var focused = -1;
+
                 //When clicking on the outer button thing, make it open and close the menu
                 el.find('a').first().click(function(e){
                     e.preventDefault();
                     e.stopPropagation();
+                    focused = -1;
                     $('.simple-dd').removeClass('active');
                     if(el.hasClass('active')){
                         return
                     }
                     el.trigger('probable_change');
                     $('#'+el.data('id')).toggleClass('active');
-                    console.log('asdf','#'+el.data('id'),$('#'+el.data('id')).length);
                 })
 
                 //When clicking off the menu, close the menu
@@ -94,31 +96,76 @@
                 })
 
                 //tab, enter, arrow keys
-                var focused = 0;
+                var shiftDown = false;
+                $(document).keyup(function(e){
+                    if(e.keyCode == 16){
+                        shiftDown=false;
+                    }
+                });
                 $(document).keydown(function(e){
                     //down = 40
-                    if(e.keyCode == 40){
-                        if(el.hasClass('active')){
+                    if(e.keyCode == 16){
+                        shiftDown=true;
+                    }
+                    else if(e.keyCode == 40){
+                        if($('#'+el.data('id')).hasClass('active')){
                             e.preventDefault();
-                            var options = el.find('a');
+                            var options = $('#'+el.data('id')).find('a');
                             if(focused < options.length-1){ focused++; }
-                            var focusedElem = options[focused]
-                            focusedElem.focus()
+                            var focusedElem = options[focused];
+                            focusedElem.focus();
+                        }
+                    }
+                    //tab = 9
+                    else if(e.keyCode == 9){
+                        if($('#'+el.data('id')).hasClass('active')){
+                            var options = $('#'+el.data('id')).find('a');
+                            if(focused < options.length-1 && !shiftDown){
+                                focused++;
+                                var focusedElem = options[focused];
+                                focusedElem.focus();
+                                e.preventDefault();
+                            }
+                            else if(shiftDown){
+                                if(focused > 0){
+                                    focused--;
+                                    var focusedElem = options[focused];
+                                    focusedElem.focus();
+                                }
+                                else {
+                                    focused--;
+                                    $('.simple-dd').removeClass('active');
+                                    el.find('a').first().focus();
+                                }
+                                e.preventDefault();
+                            }
+                            else {
+                                focused++;
+                                if(el.data('next')){
+                                    $(el.data('next')).find('a').focus();
+                                    $('.simple-dd').removeClass('active');
+                                    e.preventDefault();
+                                }
+                                else {
+                                    el.find('a').focus();
+                                    $('.simple-dd').removeClass('active');
+                                }
+                            }
                         }
                     }
                     //up = 38
                     else if(e.keyCode == 38){
-                        if(el.hasClass('active')){
+                        if($('#'+el.data('id')).hasClass('active')){
                             e.preventDefault();
-                            var options = el.find('a');
+                            var options = $('#'+el.data('id')).find('a');
                             if(focused > 0){ focused--; }
-                            var focusedElem = options[focused]
-                            focusedElem.focus()
+                            var focusedElem = options[focused];
+                            focusedElem.focus();
                         }
                     }
                     //esc = 27
                     else if(e.keyCode == 27){
-                        if(el.hasClass('active')){
+                        if($('#'+el.data('id')).hasClass('active')){
                             $('.simple-dd').removeClass('active');
                         }
                     }
