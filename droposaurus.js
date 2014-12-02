@@ -105,7 +105,7 @@
                             if(par.find('.btn-dd-select .sub').length == 0){
                                 par.find('.btn-dd-select').append('<span class="sub"></span>')
                             }
-                            par.find('.btn-dd-select .sub').first().text( sel.data('subtext') || '' );
+                            par.find('.btn-dd-select .sub').first().text( el.data('subtext') || sel.data('subtext') || '' );
 
                             //When clicking on the outer button thing, make it open and close the menu
                             par.find('.btn-dd').click(function(e){
@@ -132,7 +132,7 @@
                                 if(par.find('.btn-dd-select .sub').length == 0){
                                     par.find('.btn-dd-select').append('<span class="sub"></span>')
                                 }
-                                par.find('.btn-dd-select .sub').first().text( sel.data('subtext') || '' );
+                                par.find('.btn-dd-select .sub').first().text( el.data('subtext') || sel.data('subtext') || '' );
                                 el.trigger('change');
                             })
 
@@ -183,7 +183,7 @@
                                         if(active.find('a .sub').length == 0){
                                             active.find('a').append('<span class="sub"></span>')
                                         }
-                                        active.find('a .sub').first().text( sel.data('subtext') || '' );
+                                        active.find('a .sub').first().text( el.data('subtext') || sel.data('subtext') || '' );
                                     }
                                 }
                                 //enter
@@ -200,7 +200,7 @@
                                         if(active.find('a .sub').length == 0){
                                             active.find('a').append('<span class="sub"></span>')
                                         }
-                                        active.find('a .sub').first().text( sel.data('subtext') );
+                                        active.find('a .sub').first().text( el.data('subtext') || sel.data('subtext') || '' );
                                     }
                                 }
                             });
