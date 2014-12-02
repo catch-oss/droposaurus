@@ -82,10 +82,11 @@
                     e.preventDefault();
                     e.stopPropagation();
                     focused = -1;
-                    $('.simple-dd').removeClass('active');
-                    if(el.hasClass('active')){
+                    if($('#'+el.data('id')).hasClass('active')){
+                        $('.simple-dd').removeClass('active');
                         return
                     }
+                    $('.simple-dd').removeClass('active');
                     el.trigger('probable_change');
                     $('#'+el.data('id')).toggleClass('active');
                 })
