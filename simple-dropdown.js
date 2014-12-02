@@ -26,11 +26,12 @@
         this.options = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
-        if (!this.jqElem.is('.dropasaurusised')) this.init();
+        if (!this.jqElem.is('.dropasaurusised, .simple-dd-generated')) this.init();
     }
 
     Plugin.prototype = {
         init: function () {
+
             // Place initialization logic here
             // You already have access to the DOM element and
             // the options via the instance, e.g. this.element
@@ -67,7 +68,7 @@
                 var x = w.remove();
 
                 $('.body').append(x);
-                x.wrap('<div class="simple-dd" id="'+el.data('id')+'"></div>');
+                x.wrap('<div class="simple-dd simple-dd-generated" id="'+el.data('id')+'"></div>');
                 x.parent().css({
                     position: 'absolute',
                     top: y.offset().top+y.height(),
