@@ -50,16 +50,18 @@
 
                 var w = el.find('ul');
 
-                y = w.parent();
+                var y = w.parent();
 
                 var x = w.remove();
 
                 $('.body').append(x);
                 x.wrap('<div class="simple-dd simple-dd-generated" id="'+el.data('id')+'"></div>');
-                x.parent().css({
-                    position: 'absolute',
-                    top: y.offset().top+y.height(),
-                    left: y.offset().left
+                $(window).on('resize',function(){
+                    x.parent().css({
+                        position: 'absolute',
+                        top: y.offset().top+y.height(),
+                        left: y.offset().left
+                    });
                 });
 
 
