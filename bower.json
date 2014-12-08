@@ -1,6 +1,6 @@
 {
   "name": "droposaurus",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repo": "catch/droposaurus",
   "homepage": "http://gl.catch.co.nz/catch/droposaurus",
   "description": "An enormous dropdown replacement library",
