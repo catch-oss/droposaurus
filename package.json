@@ -1,5 +1,5 @@
 {
-  "name": "dropasaurus",
+  "name": "droposaurus",
   "version": "0.1.0",
   "description": "fixes some issues with old browsers' overflow support",
   "main": "gush.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://gl.catch.co.nz/catch/dropasaurus",
+    "url": "http://gl.catch.co.nz/catch/droposaurus"
   },
   "devDependencies": {
     "uglify-js": "2.4.15"
@@ -24,6 +24,6 @@
   "author": "Sam Dogg, AzT3K, DJ 'gold-standard' West",
   "license": "MIT",
   "bugs": {
-    "url": "http://gl.catch.co.nz/catch/dropasaurus/issues"
+    "url": "http://gl.catch.co.nz/catch/droposaurus/issues"
   }
 }

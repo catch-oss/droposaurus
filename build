@@ -1,7 +1,7 @@
 #!/bin/bash
 
-OUTPUT=$(uglifyjs dropasaurus.js -m -r '$,require,exports')
-echo ";$OUTPUT" > dropasaurus.min.js
+OUTPUT=$(uglifyjs droposaurus.js -m -r '$,require,exports')
+echo ";$OUTPUT" > droposaurus.min.js
 
 OUTPUT=$(uglifyjs simple-dropdown.js -m -r '$,require,exports')
 echo ";$OUTPUT" > simple-dropdown.min.js
