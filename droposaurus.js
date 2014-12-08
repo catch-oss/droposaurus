@@ -39,20 +39,8 @@
             // you can add more functions like the one below and
             // call them like so: this.yourOtherFunction(this.element, this.options).
 
-            if (!$('body > .body').length) {
-                var scrollTop = $(window).scrollTop();
-                var $wrap = $('<div class="body"></div>').css({
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    overflow: 'scroll',
-                    '-webkit-overflow-scrolling': 'touch'
-                });
-                $('body').wrapInner($wrap);
-                $wrap.scrollTop(scrollTop);
-            }
+            // touch my body
+            $.addBody();
 
             var el = this.jqElem;
             el.each(function() {
