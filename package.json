@@ -1,6 +1,6 @@
 {
   "name": "droposaurus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "fixes some issues with old browsers' overflow support",
   "main": "gush.js",
   "scripts": {
