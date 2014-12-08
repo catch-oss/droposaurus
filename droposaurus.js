@@ -123,7 +123,10 @@
                     }
                     par.find('.btn-dd-select .sub').first().text(el.data('subtext') || sel.data('subtext') || '');
                     el.trigger('change');
-                })
+                });
+
+                // attach the gusher
+                par.find('ul').gush({x: false, move: {stopPropagation: true}});
 
                 //When clicking off the menu, close the menu
                 $('html').click(function(e) {
