@@ -90,7 +90,7 @@
                             //populate the list with the select items
                             el.find('option').each(function(){
                                 if($(this).val()!=''){
-                                    par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link'+ (el.data('selected')==$(this).val() ? ' selected' : '') +'" href="" tabindex="-1" data-value="'+$(this).val()+'">'+
+                                    par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link'+ ($(this).text()=='Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') +(el.data('selected')==$(this).val() ? ' selected' : '') +'" href="" tabindex="-1" data-value="'+$(this).val()+'">'+
                                     '<span class="main">'+$(this).text()+'</span>'+
                                     ( $(this).data('subtext') ? '<span class="sub">' + $(this).data('subtext') + '</span>' : '' )+
                                     '</a></li>')
