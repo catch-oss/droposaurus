@@ -156,9 +156,9 @@
                                     if(par.find('.btn-dd.active').length){
                                         e.preventDefault();
                                         var options = par.find('.btn-dd-option a');
-                            if (focused > 0) {
-                                focused--;
-                            }
+                                        if (focused > 0) {
+                                            focused--;
+                                        }
                                         var focusedElem = options[focused]
                                         focusedElem.focus()
                                         el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
