@@ -1,4 +1,5 @@
-;(function ( $, window, document, undefined ) {
+;
+(function($, window, document, undefined) {
 
         // undefined is used here as the undefined global variable in ECMAScript 3 is
         // mutable (ie. it can be changed by someone else). undefined isn't really being
@@ -26,7 +27,7 @@
                 this.options = $.extend( {}, defaults, options );
                 this._defaults = defaults;
                 this._name = pluginName;
-                this.init();
+        if (!this.jqElem.is('.dropasaurusised')) this.init();
         }
 
         Plugin.prototype = {
@@ -38,20 +39,8 @@
                         // you can add more functions like the one below and
                         // call them like so: this.yourOtherFunction(this.element, this.options).
 
-                        if (!$('body > .body').length) {
-                            var scrollTop = $(window).scrollTop();
-                            var $wrap  = $('<div class="body"></div>').css({
-                                position: 'fixed',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                overflow: 'scroll',
-                                '-webkit-overflow-scrolling': 'touch'
-                            });
-                            $('body').wrapInner($wrap);
-                            $wrap.scrollTop(scrollTop);
-                        }
+            // touch my body
+            $.addBody();
 
                         var el = this.jqElem;
                         el.each(function(){
@@ -134,7 +123,10 @@
                                 }
                                 par.find('.btn-dd-select .sub').first().text( el.data('subtext') || sel.data('subtext') || '' );
                                 el.trigger('change');
-                            })
+                });
+
+                // attach the gusher
+                par.find('ul').gush({x: false, move: {stopPropagation: true}});
 
                             //When clicking off the menu, close the menu
                             $('html').click(function(e){
@@ -150,7 +142,9 @@
                                     if(par.find('.btn-dd.active').length){
                                         e.preventDefault();
                                         var options = par.find('.btn-dd-option a');
-                                        if(focused < options.length-1){ focused++; }
+                            if (focused < options.length - 1) {
+                                focused++;
+                            }
                                         var focusedElem = options[focused]
                                         focusedElem.focus()
                                         el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
@@ -162,7 +156,9 @@
                                     if(par.find('.btn-dd.active').length){
                                         e.preventDefault();
                                         var options = par.find('.btn-dd-option a');
-                                        if(focused > 0){ focused--; }
+                            if (focused > 0) {
+                                focused--;
+                            }
                                         var focusedElem = options[focused]
                                         focusedElem.focus()
                                         el.find('option[value="'+$(focusedElem).data('value')+'"]').prop('selected',true);
@@ -204,7 +200,10 @@
                                     }
                                 }
                             });
-                        })
+            });
+
+            // add the class so we know its all initialised
+            this.jqElem.addClass('dropasaurusised');
                 }
         };
 

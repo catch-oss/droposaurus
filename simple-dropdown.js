@@ -26,11 +26,12 @@
         this.options = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
-        this.init();
+        if (!this.jqElem.is('.dropasaurusised, .simple-dd-generated')) this.init();
     }
 
     Plugin.prototype = {
         init: function () {
+
             // Place initialization logic here
             // You already have access to the DOM element and
             // the options via the instance, e.g. this.element
@@ -38,40 +39,29 @@
             // you can add more functions like the one below and
             // call them like so: this.yourOtherFunction(this.element, this.options).
 
-            if (!$('body > .body').length) {
-                var scrollTop = $(window).scrollTop();
-                var $wrap  = $('<div class="body"></div>').css({
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    overflow: 'scroll',
-                    '-webkit-overflow-scrolling': 'touch'
-                });
-                $('body').wrapInner($wrap);
-                $wrap.scrollTop(scrollTop);
-            }
+            // touch my body
+            $.addBody();
 
             var el = this.jqElem;
             var outEl = this.jqElem;
-
 
             el.each(function(){
                 var el = $(this);
 
                 var w = el.find('ul');
 
-                y = w.parent();
+                var y = w.parent();
 
                 var x = w.remove();
 
                 $('.body').append(x);
-                x.wrap('<div class="simple-dd" id="'+el.data('id')+'"></div>');
-                x.parent().css({
-                    position: 'absolute',
-                    top: y.offset().top+y.height(),
-                    left: y.offset().left
+                x.wrap('<div class="simple-dd simple-dd-generated" id="'+el.data('id')+'"></div>');
+                $(window).on('resize',function(){
+                    x.parent().css({
+                        position: 'absolute',
+                        top: y.offset().top+y.height(),
+                        left: y.offset().left
+                    });
                 });
 
 
@@ -172,6 +162,10 @@
                     }
                 });
             });
+
+            // add the class so we know its all initialised
+            this.jqElem.addClass('dropasaurusised');
+
         }
     };
 
