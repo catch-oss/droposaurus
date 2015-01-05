@@ -79,6 +79,8 @@
                     $('.simple-dd').removeClass('active');
                     el.trigger('probable_change');
                     $('#'+el.data('id')).toggleClass('active');
+
+                    $(window).trigger('resize');
                 })
 
                 //When clicking off the menu, close the menu
