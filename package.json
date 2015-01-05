@@ -1,7 +1,7 @@
 {
   "name": "droposaurus",
-  "version": "0.1.4",
-  "description": "fixes some issues with old browsers' overflow support",
+  "version": "0.1.5",
+  "description": "An enormous dropdown replacement library",
   "main": "gush.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
