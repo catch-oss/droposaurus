@@ -17,7 +17,7 @@
         };
 
     // The actual plugin constructor
-    function Plugin(element, options, params) {
+    function Plugin(element, options) {
         this.element = element;
         this.jqElem = $(element);
         // jQuery has an extend method which merges the contents of two or
@@ -28,7 +28,6 @@
         this._defaults = defaults;
         this._name = pluginName;
         if (!this.jqElem.is('.dropasaurusised')) this.init();
-        if (options == 'update') this.update(params);
     }
 
     Plugin.prototype = {
@@ -44,7 +43,7 @@
             // iterate through each elem in the jq selector
             $el.each(function() {
 
-                var $el = $(this),
+                var $el = $(this).wrap('<div class="dropdown-wrapper"></div>'),
                     $par = $el.parent(),
                     classList = ($el.attr('class') || '').replace('select-invisible', ''),
                     catchDropdownHtml = '<label class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
@@ -63,7 +62,6 @@
                                         '</label>'
 
                 //set up the proper display of the select and list elements
-                $el.wrap('<div class="dropdown-wrapper"></div>');
                 $el.after(catchDropdownHtml);
                 $el.addClass('hidden');
 
@@ -166,7 +164,7 @@
             $el.each(function(){
 
                 var $el = $(this),
-                    $par = $el.parent();
+                    $par = $el.closest('.dropdown-wrapper');
 
                 // update the original select if we have new options provided
                 if (typeof params == 'object') {
@@ -184,6 +182,8 @@
 
                 }
 
+                if (params != undefined) $par.find('ul').html('');
+
                 //Add the blank option if allowed
                 $el.prepend('<option value=""></option>');
                 if ($el.attr('allow-empty') == "true") {
@@ -191,6 +191,7 @@
                 }
 
                 //populate the list with the select items
+                // console.log($el.find('option'));
                 $el.find('option').each(function() {
                     if ($(this).val() != '') {
                         $par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link' + ($(this).text() == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + ($el.data('selected') == $(this).val() ? ' selected' : '') + '" href="" tabindex="-1" data-value="' + $(this).val() + '">' +
@@ -249,7 +250,9 @@
     $.fn[pluginName] = function(options, params) {
         return this.each(function() {
             if (!$.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName, new Plugin(this, options, params));
+                $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+            } else if (options == 'update') {
+                $.data(this, "plugin_" + pluginName).update(params);
             }
         });
     };
