@@ -1,4 +1,5 @@
 ;
+console.log("loaded drops");
 (function($, window, document, undefined) {
 
     // undefined is used here as the undefined global variable in ECMAScript 3 is
@@ -32,6 +33,8 @@
 
     Plugin.prototype = {
         init: function() {
+
+            console.log("such init");
 
             // vars
             var $el = this.jqElem,
@@ -213,11 +216,14 @@
 
                 //When clicking on the outer button thing, make it open and close the menu
                 $par.find('.btn-dd').off('click.dropasaur').on('click.dropasaur', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if($(this).hasClass('disabled')){
+                        return;
+                    }
                     if (!$(this).hasClass('active')) {
                         $('.btn-dd').removeClass('active');
                     }
-                    e.preventDefault();
-                    e.stopPropagation();
                     $el.trigger('probable_change');
                     var selected = $el.val();
                     $(this).find('li a').each(function() {
@@ -226,7 +232,7 @@
                     $(this).toggleClass('active');
                     $('.body').toggleClass('no-overflow');
                     $(this).find('a').first().addClass('populated');
-                })
+                });
 
                 //When clicking on the menu items, select that menu item and close the menu
                 $par.find('li a').off('click.dropasaur').on('click.dropasaur', function(e) {
@@ -242,6 +248,10 @@
 
             });
 
+        },
+        setDisabled: function(disabled){
+            console.log("such yolo "+disabled,this.jqElem.parent());
+            this.jqElem.parent().find('.btn-dd').toggleClass('disabled',disabled);
         }
     };
 
@@ -253,6 +263,8 @@
                 $.data(this, "plugin_" + pluginName, new Plugin(this, options));
             } else if (options == 'update') {
                 $.data(this, "plugin_" + pluginName).update(params);
+            } else if (options == 'setDisabled') {
+                $.data(this, "plugin_" + pluginName).setDisabled(params);
             }
         });
     };
