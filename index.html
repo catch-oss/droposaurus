@@ -20,12 +20,30 @@
                 margin:auto;
             }
         </style>
+        <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="droposaurus.js"></script>
+        <script>
+            console.log(1234);
+            $(".catch-dropdown").catchDropdown();
+            console.log(2222);
+        </script>
     </head>
     <body>
 
         <div class="container">
             <h1>Demos</h1>
             <p>This should be a demo of the plugin</p>
+            <form>
+              <fieldset>
+                <select class="catch-dropdown other-class" data-label="Selection"
+                  data-subtext="subtext"
+                  data-placeholder="Please select one" name="select-name"
+                  data-error="false" allow-empty="true">
+                    <option value="option 1">Option 1</option>
+                    <option value="option 2">option 2</option>
+                </select>
+              </fieldset>
+            </form>
         </div>
 
     </body>
