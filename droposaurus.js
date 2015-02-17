@@ -1,5 +1,4 @@
 ;
-console.log("loaded drops");
 (function($, window, document, undefined) {
 
     // undefined is used here as the undefined global variable in ECMAScript 3 is
@@ -33,8 +32,6 @@ console.log("loaded drops");
 
     Plugin.prototype = {
         init: function() {
-
-            console.log("such init");
 
             // vars
             var $el = this.jqElem,
@@ -250,7 +247,6 @@ console.log("loaded drops");
 
         },
         setDisabled: function(disabled){
-            console.log("such yolo "+disabled,this.jqElem.parent());
             this.jqElem.parent().find('.btn-dd').toggleClass('disabled',disabled);
         }
     };
