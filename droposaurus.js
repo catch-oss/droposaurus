@@ -49,7 +49,9 @@
                     catchDropdownHtml = '<label class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
                                             '<div class="btn-dd">' +
                                                 '<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.data('selected') ? ' populated' : '') + '" tabindex="0">' +
-                                                '<span class="main">' + $el.data('placeholder') + '</span>' +
+                                                '<span class="main"'+
+                                                    ( $el.data('placeholder-color') ? (' style="color:'+$el.data('placeholder-color')+'"') : '' )+
+                                                    '>' + $el.data('placeholder') + '</span>' +
                                                 ($el.data('subtext') ? ("<span class='sub'>" + $el.data('subtext') + "</span>") : "") + '</a>' +
                                                 '<div class="btn-dd-options">' +
                                                     '<div class="btn-dd-header">' +
