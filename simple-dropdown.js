@@ -63,12 +63,6 @@
                         top: y.offset().top + y.height(),
                     }
 
-                    console.log(
-                        " window: " + $(window).width() +
-                        " left:" + y.offset().left +
-                        " oW: " + y.outerWidth()
-                    )
-
                     if (el.is('.pin-right')) {
                         conf['left'] = y.offset().left - x.outerWidth() + y.outerWidth();
                     } else {
