@@ -57,11 +57,25 @@
                 $('.body').append(x);
                 x.wrap('<div class="simple-dd simple-dd-generated" id="'+el.data('id')+'"></div>');
                 $(window).on('resize',function(){
-                    x.parent().css({
+
+                    var conf = {
                         position: 'absolute',
-                        top: y.offset().top+y.height(),
-                        left: y.offset().left
-                    });
+                        top: y.offset().top + y.height(),
+                    }
+
+                    console.log(
+                        " window: " + $(window).width() +
+                        " left:" + y.offset().left +
+                        " oW: " + y.outerWidth()
+                    )
+
+                    if (el.is('.pin-right')) {
+                        conf['left'] = y.offset().left - x.outerWidth() + y.outerWidth();
+                    } else {
+                        conf['left'] = y.offset().left;
+                    }
+
+                    x.parent().css(conf);
                 });
 
 
