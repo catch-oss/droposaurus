@@ -55,7 +55,12 @@
                 var x = w.remove();
 
                 $('.body').append(x);
-                x.wrap('<div class="simple-dd simple-dd-generated" id="'+el.data('id')+'"></div>');
+
+                x.wrap(
+                    '<div class="simple-dd simple-dd-generated ' + (el.is('.pin-right') ? 'pin-right' : '') + '"' +
+                    '     id="' + el.data('id') + '"></div>'
+                );
+
                 $(window).on('resize',function(){
 
                     var conf = {
