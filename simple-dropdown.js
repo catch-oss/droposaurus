@@ -84,14 +84,17 @@
                 el.find('a').first().click(function(e){
                     e.preventDefault();
                     e.stopPropagation();
+                    console.log(outEl)
                     focused = -1;
                     if($('#'+el.data('id')).hasClass('active')){
                         $('.simple-dd').removeClass('active');
+                        outEl.removeClass('active');
                         return
                     }
                     $('.simple-dd').removeClass('active');
                     el.trigger('probable_change');
                     $('#'+el.data('id')).toggleClass('active');
+                    outEl.toggleClass('active');
 
                     $(window).trigger('resize');
                 })
