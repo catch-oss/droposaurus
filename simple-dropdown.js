@@ -84,7 +84,7 @@
                 el.find('a').first().click(function(e){
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log(outEl)
+                    // console.log(outEl)
                     focused = -1;
                     if($('#'+el.data('id')).hasClass('active')){
                         $('.simple-dd').removeClass('active');
