@@ -236,6 +236,7 @@
                 //When clicking on the menu items, select that menu item and close the menu
                 $par.find('li a').off('click.dropasaur').on('click.dropasaur', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
                     $par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
                     if ($par.find('.btn-dd-select .sub').length == 0) {
@@ -243,6 +244,8 @@
                     }
                     $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
                     $el.trigger('change');
+                    $('.body').removeClass('no-overflow');
+                    $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
                 });
 
             });
