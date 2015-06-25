@@ -204,7 +204,7 @@
                 });
 
                 //Preselect an option if one is specified, else the first
-                $sel = $el.data('selected') ? $el.find('option[value="' + $el.data('selected') + '"]') : $el.find('option').first()
+                $sel = $el.data('selected')!=null ? $el.find('option[value="' + $el.data('selected') + '"]') : $el.find('option').first();
                 $sel.prop('selected', true);
                 $el.trigger('change');
                 $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '&nbsp;');
