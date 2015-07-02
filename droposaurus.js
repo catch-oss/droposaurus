@@ -43,7 +43,7 @@
             // iterate through each elem in the jq selector
             $el.each(function() {
 
-                var $el = $(this).wrap('<div class="dropdown-wrapper"></div>'),
+                var $el = $(this).wrap('<div class="dropdown-wrapper' + ($(this).data('size') ? (' size'+$(this).data('size')) : '') +'"></div>'),
                     $par = $el.parent(),
                     classList = ($el.attr('class') || '').replace('select-invisible', ''),
                     catchDropdownHtml = '<label class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
