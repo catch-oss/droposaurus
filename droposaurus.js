@@ -99,6 +99,7 @@
                             focusedElem.focus()
                             $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
                             $el.trigger('change');
+                            $el.trigger('changeDrop',[$(focusedElem).data('value')]);
                         }
                     }
                     //up = 38
@@ -113,6 +114,7 @@
                             focusedElem.focus()
                             $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
                             $el.trigger('change');
+                            $el.trigger('changeDrop',[$(focusedElem).data('value')]);
                         }
                     }
                     //tab
