@@ -13,7 +13,7 @@
     // Create the defaults once
     var pluginName = "catchDropdown",
         defaults = {
-            propertyName: "value"
+            touchBody: true
         };
 
     // The actual plugin constructor
@@ -31,6 +31,9 @@
     }
 
     Plugin.prototype = {
+        scrollElem: function() {
+            return $('.body').length ? $('.body') : $(window);
+        },
         init: function() {
 
             // vars
@@ -38,7 +41,7 @@
                 self = this;
 
             // touch my body
-            $.addBody();
+            if (this.options.touchBody) $.addBody();
 
             // iterate through each elem in the jq selector
             $el.each(function() {
@@ -81,7 +84,7 @@
                 //When clicking off the menu, close the menu
                 $('html').click(function(e) {
                     $par.find('.btn-dd').removeClass('active');
-                    $('.body').removeClass('no-overflow');
+                    self.scrollElem().removeClass('no-overflow');
                 });
 
                 //tab, enter, arrow keys
@@ -124,7 +127,7 @@
                             var $sel = $el.find('option[value="' + $el.val() + '"]');
                             e.preventDefault();
                             active.removeClass('active');
-                            $('.body').removeClass('no-overflow');
+                            self.scrollElem().removeClass('no-overflow');
                             active.find('a').first().addClass('populated');
                             active.find('a').first().focus();
                             active.find('a .main').first().text($sel.text());
@@ -141,7 +144,7 @@
                             var $sel = $el.find('option[value="' + $el.val() + '"]');
                             e.preventDefault();
                             active.removeClass('active');
-                            $('.body').removeClass('no-overflow');
+                            self.scrollElem().removeClass('no-overflow');
                             active.find('a').first().addClass('populated');
                             active.find('a').first().focus();
                             active.find('a .main').first().text($sel.text());
@@ -161,6 +164,7 @@
         update: function(params) {
 
             var $el = this.jqElem,
+                self = this,
                 $sel,
                 opt,
                 i;
@@ -231,7 +235,7 @@
                         $(this).toggleClass('selected', selected == $(this).data('value'));
                     });
                     $(this).toggleClass('active');
-                    $('.body').toggleClass('no-overflow');
+                    self.scrollElem().toggleClass('no-overflow');
                     $(this).find('a').first().addClass('populated');
                 });
 
@@ -246,7 +250,7 @@
                     }
                     $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
                     $el.trigger('change');
-                    $('.body').removeClass('no-overflow');
+                    self.scrollElem().removeClass('no-overflow');
                     $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
                 });
 

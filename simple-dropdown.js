@@ -12,7 +12,7 @@
     // Create the defaults once
     var pluginName = "simpleDropdown",
     defaults = {
-        propertyName: "value"
+        touchBody: true
     };
 
     // The actual plugin constructor
@@ -30,6 +30,9 @@
     }
 
     Plugin.prototype = {
+        scrollElem: function() {
+            return $('.body').length ? $('.body') : $(window);
+        },
         init: function () {
 
             // Place initialization logic here
@@ -40,10 +43,11 @@
             // call them like so: this.yourOtherFunction(this.element, this.options).
 
             // touch my body
-            $.addBody();
+            if (this.options.touchBody) $.addBody();
 
-            var el = this.jqElem;
-            var outEl = this.jqElem;
+            var el = this.jqElem,
+                self = this,
+                outEl = this.jqElem;
 
             el.each(function(){
                 var el = $(this);
@@ -54,7 +58,7 @@
 
                 var x = w.remove();
 
-                $('.body').append(x);
+                self.scrollElem().append(x);
 
                 x.wrap(
                     '<div class="simple-dd simple-dd-generated ' + (el.is('.pin-right') ? 'pin-right' : '') + '"' +
