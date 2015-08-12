@@ -193,30 +193,66 @@
                 if (params != undefined) $par.find('ul').html('');
 
                 // Add the blank option if allowed
-                $el.prepend('<option value=""></option>');
+                // this is stupid - having null values is cool but...
                 if ($el.attr('allow-empty') == "true" || $el.attr('data-allow-empty') == "true") {
-                    $par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value="">&nbsp;</a></li>')
+                    $el.prepend('<option value=""></option>');
+                    $par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value=""></a></li>')
                 }
 
                 //populate the list with the select items
                 $el.find('option').each(function() {
-                    if ($(this).text() != '') {
+
+                    var $this = $(this),
+                        txt = $this.text(),
+                        val = $this.attr('value') === undefined ? '' : $this.attr('value'),     // $el.val() returns $el.text() if value attr is missing
+                        sel = $el.data('selected') === undefined ? '' : $el.data('selected');   // being consistent
+
+                    if ($this.text() != '') {
                         $par.find('ul').append(
                             '<li class="input btn-dd-option catch-dropdown-item">' +
-                                '<a class="catch-dropdown-link' + ($(this).text() == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + ($el.data('selected') == $(this).val() ? ' selected' : '') + '" href="" tabindex="-1" data-value="' + $(this).val() + '">' +
-                                    '<span class="main">' + $(this).text() + '</span>' +
-                                    ($(this).data('subtext') ? '<span class="sub">' + $(this).data('subtext') + '</span>' : '') +
+                                // this add connection thing is BS
+                                '<a class="catch-dropdown-link' + (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
+                                   'href="" ' +
+                                   'tabindex="-1" ' +
+                                   'data-value="' + val + '">' +
+                                    '<span class="main">' + txt + '</span>' +
+                                    ($this.data('subtext') ? '<span class="sub">' + $this.data('subtext') + '</span>' : '') +
                                 '</a>' +
                             '</li>'
                         );
                     }
                 });
 
-                //Preselect an option if one is specified, else the first
-                $sel = $el.data('selected')!=null ? $el.find('option[value="' + $el.data('selected') + '"]') : $el.find('option').first();
+                // if no value is supplied by the data elem
+                // find the selected item in the select
+                // else select the first
+                if ($el.data('selected') === undefined) {
+                    $sel = $el.find('option[selected]');
+                    if (!$sel.length) $sel = $el.find('option[value="' + $el.val() + '"]');
+                    if (!$sel.length) $sel = $el.find('option').first();
+                }
+                else {
+
+                    // find elem specified by data attr
+                    $sel = $el.find('option[value="' + $el.data('selected') + '"]');
+
+                    if (!$sel.length) {
+
+                        // if we got here then we couldn't find an option with a value attr that matches
+                        // so do a looser match
+                        $el.find('option').each(function() {
+                            var val = $(this).attr('value') === undefined ? '' : $(this).attr('value');
+                            if ($el.data('selected') == val) $sel = $(this);
+                        });
+                    }
+                }
+
+                console.log($sel);
+
+                // select the current value we found above
                 $sel.prop('selected', true);
                 $el.trigger('change');
-                $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '&nbsp;');
+                $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '');
                 if ($par.find('.btn-dd-select .sub').length == 0) {
                     $par.find('.btn-dd-select').append('<span class="sub"></span>')
                 }
