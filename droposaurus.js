@@ -247,8 +247,6 @@
                     }
                 }
 
-                console.log($sel);
-
                 // select the current value we found above
                 $sel.prop('selected', true);
                 $el.trigger('change');
