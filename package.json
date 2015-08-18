@@ -1,6 +1,6 @@
 {
   "name": "droposaurus",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "An enormous dropdown replacement library",
   "main": "gush.js",
   "scripts": {
