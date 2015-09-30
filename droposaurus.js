@@ -196,7 +196,7 @@
                 // this is stupid - having null values is cool but...
                 if ($el.attr('allow-empty') == "true" || $el.attr('data-allow-empty') == "true") {
                     $el.prepend('<option value=""></option>');
-                    $par.find('ul').append('<li class="input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value=""></a></li>')
+                    $par.find('ul').append('<li class="dd-empty-option input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value=""></a></li>')
                 }
 
                 //populate the list with the select items
