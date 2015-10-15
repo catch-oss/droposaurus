@@ -1,316 +1,321 @@
-;
-(function($, window, document, undefined) {
+;(function (root, factory) {
 
-    // undefined is used here as the undefined global variable in ECMAScript 3 is
-    // mutable (ie. it can be changed by someone else). undefined isn't really being
-    // passed in so we can ensure the value of it is truly undefined. In ES5, undefined
-    // can no longer be modified.
+   // AMD. Register as an anonymous module depending on jQuery.
+   if (typeof define === 'function' && define.amd) define(['jquery', './../body-toucher/body-toucher', './../gush/gush'], factory);
 
-    // window and document are passed through as local variable rather than global
-    // as this (slightly) quickens the resolution process and can be more efficiently
-    // minified (especially when both are regularly referenced in your plugin).
+   // Node, CommonJS-like
+   else if (typeof exports === 'object') module.exports = factory(require('jquery'), require('./../body-toucher/body-toucher'), require('./../gush/gush'));
 
-    // Create the defaults once
-    var pluginName = "catchDropdown",
-        defaults = {
-            touchBody: true
-        };
+   // Browser globals (root is window)
+   else {
+       factory(root.jQuery);
+   }
 
-    // The actual plugin constructor
-    function Plugin(element, options) {
-        this.element = element;
-        this.jqElem = $(element);
-        // jQuery has an extend method which merges the contents of two or
-        // more objects, storing the result in the first object. The first object
-        // is generally empty as we don't want to alter the default options for
-        // future instances of the plugin
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        if (!this.jqElem.is('.dropasaurusised')) this.init();
-    }
+}(this, function ($, bodyToucher, gush, undefined) {
 
-    Plugin.prototype = {
-        scrollElem: function() {
-            return $('.body').length ? $('.body') : $(window);
-        },
-        init: function() {
+   "use strict"
 
-            // vars
-            var $el = this.jqElem,
-                self = this;
+   $(function() {
 
-            // touch my body
-            if (this.options.touchBody) $.addBody();
+       // Create the defaults once
+       var pluginName = "catchDropdown",
+           defaults = {
+               touchBody: true
+           };
 
-            // iterate through each elem in the jq selector
-            $el.each(function() {
+       // The actual plugin constructor
+       function Plugin(element, options) {
+           this.element = element;
+           this.jqElem = $(element);
+           // jQuery has an extend method which merges the contents of two or
+           // more objects, storing the result in the first object. The first object
+           // is generally empty as we don't want to alter the default options for
+           // future instances of the plugin
+           this.options = $.extend({}, defaults, options);
+           this._defaults = defaults;
+           this._name = pluginName;
+           if (!this.jqElem.is('.dropasaurusised')) this.init();
+       }
 
-                var $el = $(this).wrap('<div class="dropdown-wrapper' + ($(this).data('size') ? (' size'+$(this).data('size')) : '') +'"></div>'),
-                    $par = $el.parent(),
-                    classList = ($el.attr('class') || '').replace('select-invisible', ''),
-                    catchDropdownHtml = '<label aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
-                                            '<div class="btn-dd">' +
-                                                '<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.data('selected') ? ' populated' : '') + '" tabindex="0">' +
-                                                '<span class="main"'+
-                                                    ( $el.data('placeholder-color') ? (' style="color:'+$el.data('placeholder-color')+'"') : '' )+
-                                                    '>' + $el.data('placeholder') + '</span>' +
-                                                ($el.data('subtext') ? ("<span class='sub'>" + $el.data('subtext') + "</span>") : "") + '</a>' +
-                                                '<div class="btn-dd-options">' +
-                                                    '<div class="btn-dd-header">' +
-                                                        $el.data('label') +
-                                                        ' <a class="btn-dd-close">Close</a>' +
-                                                    '</div>' +
-                                                    '<ul></ul>' +
-                                                '</div>' +
-                                            '</div>' +
-                                        '</label>'
+       Plugin.prototype = {
+           init: function() {
 
-                //set up the proper display of the select and list elements
-                $el.after(catchDropdownHtml);
-                $el.addClass('hidden');
+               // vars
+               var $el = this.jqElem,
+                   self = this;
 
-                // update the options
-                self.update();
+               // touch my body
+               if (this.options.touchBody) $.addBody();
 
-                // attach the gusher
-                $par.find('ul').gush({
-                    x: false,
-                    move: {
-                        stopPropagation: true
-                    }
-                });
+               // iterate through each elem in the jq selector
+               $el.each(function() {
 
-                //When clicking off the menu, close the menu
-                $('html').click(function(e) {
-                    $par.find('.btn-dd').removeClass('active');
-                    self.scrollElem().removeClass('no-overflow');
-                });
+                   var $el = $(this).wrap('<div class="dropdown-wrapper' + ($(this).data('size') ? (' size'+$(this).data('size')) : '') +'"></div>'),
+                       $par = $el.parent(),
+                       classList = ($el.attr('class') || '').replace('select-invisible', ''),
+                       catchDropdownHtml = '<label aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
+                                               '<div class="btn-dd">' +
+                                                   '<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.data('selected') ? ' populated' : '') + '" tabindex="0">' +
+                                                   '<span class="main"'+
+                                                       ( $el.data('placeholder-color') ? (' style="color:'+$el.data('placeholder-color')+'"') : '' )+
+                                                       '>' + $el.data('placeholder') + '</span>' +
+                                                   ($el.data('subtext') ? ("<span class='sub'>" + $el.data('subtext') + "</span>") : "") + '</a>' +
+                                                   '<div class="btn-dd-options">' +
+                                                       '<div class="btn-dd-header">' +
+                                                           $el.data('label') +
+                                                           ' <a class="btn-dd-close">Close</a>' +
+                                                       '</div>' +
+                                                       '<ul></ul>' +
+                                                   '</div>' +
+                                               '</div>' +
+                                           '</label>'
 
-                //tab, enter, arrow keys
-                var focused = -1
-                $(document).on('keydown.dropasaur', function(e) {
-                    //down = 40
-                    if (e.keyCode == 40) {
-                        if ($par.find('.btn-dd.active').length) {
-                            e.preventDefault();
-                            var options = $par.find('.btn-dd-option a');
-                            if (focused < options.length - 1) {
-                                focused++;
-                            }
-                            var focusedElem = options[focused]
-                            focusedElem.focus()
-                            $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
-                            $el.trigger('change');
-                            $el.trigger('changeDrop',[$(focusedElem).data('value')]);
-                        }
-                    }
-                    //up = 38
-                    else if (e.keyCode == 38) {
-                        if ($par.find('.btn-dd.active').length) {
-                            e.preventDefault();
-                            var options = $par.find('.btn-dd-option a');
-                            if (focused > 0) {
-                                focused--;
-                            }
-                            var focusedElem = options[focused]
-                            focusedElem.focus()
-                            $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
-                            $el.trigger('change');
-                            $el.trigger('changeDrop',[$(focusedElem).data('value')]);
-                        }
-                    }
-                    //tab
-                    else if (e.keyCode == 9) {
-                        var active = $par.find('.btn-dd.active');
-                        if (active.length) {
-                            var $sel = $el.find('option[value="' + $el.val() + '"]');
-                            e.preventDefault();
-                            active.removeClass('active');
-                            self.scrollElem().removeClass('no-overflow');
-                            active.find('a').first().addClass('populated');
-                            active.find('a').first().focus();
-                            active.find('a .main').first().text($sel.text());
-                            if (active.find('a .sub').length == 0) {
-                                active.find('a').append('<span class="sub"></span>')
-                            }
-                            active.find('a .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
-                        }
-                    }
-                    //enter
-                    else if (e.keyCode == 13) {
-                        var active = $par.find('.btn-dd.active');
-                        if (active.length) {
-                            var $sel = $el.find('option[value="' + $el.val() + '"]');
-                            e.preventDefault();
-                            active.removeClass('active');
-                            self.scrollElem().removeClass('no-overflow');
-                            active.find('a').first().addClass('populated');
-                            active.find('a').first().focus();
-                            active.find('a .main').first().text($sel.text());
-                            if (active.find('a .sub').length == 0) {
-                                active.find('a').append('<span class="sub"></span>')
-                            }
-                            active.find('a .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
-                        }
-                    }
-                });
-            });
+                   //set up the proper display of the select and list elements
+                   $el.after(catchDropdownHtml);
+                   $el.addClass('hidden');
 
-            // add the class so we know its all initialised
-            this.jqElem.addClass('dropasaurusised');
-        },
+                   // update the options
+                   self.update();
 
-        update: function(params) {
+                   // attach the gusher
+                   $par.find('ul').gush({
+                       x: false,
+                       move: {
+                           stopPropagation: true
+                       }
+                   });
 
-            var $el = this.jqElem,
-                self = this,
-                $sel,
-                opt,
-                i;
+                   //When clicking off the menu, close the menu
+                   $('html').click(function(e) {
+                       $par.find('.btn-dd').removeClass('active');
+                       $.scrollElem().removeClass('no-overflow');
+                   });
 
-            $el.each(function(){
+                   //tab, enter, arrow keys
+                   var focused = -1
+                   $(document).on('keydown.dropasaur', function(e) {
+                       //down = 40
+                       if (e.keyCode == 40) {
+                           if ($par.find('.btn-dd.active').length) {
+                               e.preventDefault();
+                               var options = $par.find('.btn-dd-option a');
+                               if (focused < options.length - 1) {
+                                   focused++;
+                               }
+                               var focusedElem = options[focused]
+                               focusedElem.focus()
+                               $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
+                               $el.trigger('change');
+                               $el.trigger('changeDrop',[$(focusedElem).data('value')]);
+                           }
+                       }
+                       //up = 38
+                       else if (e.keyCode == 38) {
+                           if ($par.find('.btn-dd.active').length) {
+                               e.preventDefault();
+                               var options = $par.find('.btn-dd-option a');
+                               if (focused > 0) {
+                                   focused--;
+                               }
+                               var focusedElem = options[focused]
+                               focusedElem.focus()
+                               $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
+                               $el.trigger('change');
+                               $el.trigger('changeDrop',[$(focusedElem).data('value')]);
+                           }
+                       }
+                       //tab
+                       else if (e.keyCode == 9) {
+                           var active = $par.find('.btn-dd.active');
+                           if (active.length) {
+                               var $sel = $el.find('option[value="' + $el.val() + '"]');
+                               e.preventDefault();
+                               active.removeClass('active');
+                               $.scrollElem().removeClass('no-overflow');
+                               active.find('a').first().addClass('populated');
+                               active.find('a').first().focus();
+                               active.find('a .main').first().text($sel.text());
+                               if (active.find('a .sub').length == 0) {
+                                   active.find('a').append('<span class="sub"></span>')
+                               }
+                               active.find('a .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                           }
+                       }
+                       //enter
+                       else if (e.keyCode == 13) {
+                           var active = $par.find('.btn-dd.active');
+                           if (active.length) {
+                               var $sel = $el.find('option[value="' + $el.val() + '"]');
+                               e.preventDefault();
+                               active.removeClass('active');
+                               $.scrollElem().removeClass('no-overflow');
+                               active.find('a').first().addClass('populated');
+                               active.find('a').first().focus();
+                               active.find('a .main').first().text($sel.text());
+                               if (active.find('a .sub').length == 0) {
+                                   active.find('a').append('<span class="sub"></span>')
+                               }
+                               active.find('a .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                           }
+                       }
+                   });
+               });
 
-                var $el = $(this),
-                    $par = $el.closest('.dropdown-wrapper');
+               // add the class so we know its all initialised
+               this.jqElem.addClass('dropasaurusised');
+           },
 
-                // update the original select if we have new options provided
-                if (typeof params == 'object') {
+           update: function(params) {
 
-                    $el.html('');
+               var $el = this.jqElem,
+                   self = this,
+                   $sel,
+                   opt,
+                   i;
 
-                    for (i=0; i<params.length; i++) {
-                        opt = params[i];
-                        $el.append('<option value="' + opt.value + '" data-subtext="' + opt.subtext + '">' + (opt.innerHTML ? opt.innerHTML : opt.value) + '<option>');
-                    }
+               $el.each(function(){
 
-                } else if (typeof params == 'string') {
+                   var $el = $(this),
+                       $par = $el.closest('.dropdown-wrapper');
 
-                    $el.html(params);
+                   // update the original select if we have new options provided
+                   if (typeof params == 'object') {
 
-                }
+                       $el.html('');
 
-                if (params != undefined) $par.find('ul').html('');
+                       for (i=0; i<params.length; i++) {
+                           opt = params[i];
+                           $el.append('<option value="' + opt.value + '" data-subtext="' + opt.subtext + '">' + (opt.innerHTML ? opt.innerHTML : opt.value) + '<option>');
+                       }
 
-                // Add the blank option if allowed
-                // this is stupid - having null values is cool but...
-                if ($el.attr('allow-empty') == "true" || $el.attr('data-allow-empty') == "true") {
-                    $el.prepend('<option value=""></option>');
-                    $par.find('ul').append('<li class="dd-empty-option input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value=""></a></li>')
-                }
+                   } else if (typeof params == 'string') {
 
-                //populate the list with the select items
-                $el.find('option').each(function() {
+                       $el.html(params);
 
-                    var $this = $(this),
-                        txt = $this.text(),
-                        val = $this.attr('value') === undefined ? '' : $this.attr('value'),     // $el.val() returns $el.text() if value attr is missing
-                        sel = $el.data('selected') === undefined ? '' : $el.data('selected');   // being consistent
+                   }
 
-                    if ($this.text() != '') {
-                        $par.find('ul').append(
-                            '<li class="input btn-dd-option catch-dropdown-item">' +
-                                // this add connection thing is BS
-                                '<a class="catch-dropdown-link' + (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
-                                   'href="" ' +
-                                   'tabindex="-1" ' +
-                                   'data-value="' + val + '">' +
-                                    '<span class="main">' + txt + '</span>' +
-                                    ($this.data('subtext') ? '<span class="sub">' + $this.data('subtext') + '</span>' : '') +
-                                '</a>' +
-                            '</li>'
-                        );
-                    }
-                });
+                   if (params != undefined) $par.find('ul').html('');
 
-                // if no value is supplied by the data elem
-                // find the selected item in the select
-                // else select the first
-                if ($el.data('selected') === undefined) {
-                    $sel = $el.find('option[selected]');
-                    if (!$sel.length) $sel = $el.find('option[value="' + $el.val() + '"]');
-                    if (!$sel.length) $sel = $el.find('option').first();
-                }
-                else {
+                   // Add the blank option if allowed
+                   // this is stupid - having null values is cool but...
+                   if ($el.attr('allow-empty') == "true" || $el.attr('data-allow-empty') == "true") {
+                       $el.prepend('<option value=""></option>');
+                       $par.find('ul').append('<li class="dd-empty-option input btn-dd-option catch-dropdown-item"><a class="catch-dropdown-link" href="" tabindex="-1" data-value=""></a></li>')
+                   }
 
-                    // find elem specified by data attr
-                    $sel = $el.find('option[value="' + $el.data('selected') + '"]');
+                   //populate the list with the select items
+                   $el.find('option').each(function() {
 
-                    if (!$sel.length) {
+                       var $this = $(this),
+                           txt = $this.text(),
+                           val = $this.attr('value') === undefined ? '' : $this.attr('value'),     // $el.val() returns $el.text() if value attr is missing
+                           sel = $el.data('selected') === undefined ? '' : $el.data('selected');   // being consistent
 
-                        // if we got here then we couldn't find an option with a value attr that matches
-                        // so do a looser match
-                        $el.find('option').each(function() {
-                            var val = $(this).attr('value') === undefined ? '' : $(this).attr('value');
-                            if ($el.data('selected') == val) $sel = $(this);
-                        });
-                    }
-                }
+                       if ($this.text() != '') {
+                           $par.find('ul').append(
+                               '<li class="input btn-dd-option catch-dropdown-item">' +
+                                   // this add connection thing is BS
+                                   '<a class="catch-dropdown-link' + (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
+                                      'href="" ' +
+                                      'tabindex="-1" ' +
+                                      'data-value="' + val + '">' +
+                                       '<span class="main">' + txt + '</span>' +
+                                       ($this.data('subtext') ? '<span class="sub">' + $this.data('subtext') + '</span>' : '') +
+                                   '</a>' +
+                               '</li>'
+                           );
+                       }
+                   });
 
-                // select the current value we found above
-                $sel.prop('selected', true);
-                $el.trigger('change');
-                $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '');
-                if ($par.find('.btn-dd-select .sub').length == 0) {
-                    $par.find('.btn-dd-select').append('<span class="sub"></span>')
-                }
-                $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                   // if no value is supplied by the data elem
+                   // find the selected item in the select
+                   // else select the first
+                   if ($el.data('selected') === undefined) {
+                       $sel = $el.find('option[selected]');
+                       if (!$sel.length) $sel = $el.find('option[value="' + $el.val() + '"]');
+                       if (!$sel.length) $sel = $el.find('option').first();
+                   }
+                   else {
 
-                //When clicking on the outer button thing, make it open and close the menu
-                $par.find('.btn-dd').off('click.dropasaur').on('click.dropasaur', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if($(this).hasClass('disabled')){
-                        return;
-                    }
-                    if (!$(this).hasClass('active')) {
-                        $('.btn-dd').removeClass('active');
-                    }
-                    $el.trigger('probable_change');
-                    var selected = $el.val();
-                    $(this).find('li a').each(function() {
-                        $(this).toggleClass('selected', selected == $(this).data('value'));
-                    });
-                    $(this).toggleClass('active');
-                    self.scrollElem().toggleClass('no-overflow');
-                    $(this).find('a').first().addClass('populated');
-                });
+                       // find elem specified by data attr
+                       $sel = $el.find('option[value="' + $el.data('selected') + '"]');
 
-                //When clicking on the menu items, select that menu item and close the menu
-                $par.find('li a').off('click.dropasaur').on('click.dropasaur', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
-                    $par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
-                    if ($par.find('.btn-dd-select .sub').length == 0) {
-                        $par.find('.btn-dd-select').append('<span class="sub"></span>')
-                    }
-                    $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
-                    $el.trigger('change');
-                    self.scrollElem().removeClass('no-overflow');
-                    $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
-                });
+                       if (!$sel.length) {
 
-            });
+                           // if we got here then we couldn't find an option with a value attr that matches
+                           // so do a looser match
+                           $el.find('option').each(function() {
+                               var val = $(this).attr('value') === undefined ? '' : $(this).attr('value');
+                               if ($el.data('selected') == val) $sel = $(this);
+                           });
+                       }
+                   }
 
-        },
-        setDisabled: function(disabled){
-            this.jqElem.parent().find('.btn-dd').toggleClass('disabled',disabled);
-        }
-    };
+                   // select the current value we found above
+                   $sel.prop('selected', true);
+                   $el.trigger('change');
+                   $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '');
+                   if ($par.find('.btn-dd-select .sub').length == 0) {
+                       $par.find('.btn-dd-select').append('<span class="sub"></span>')
+                   }
+                   $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
 
-    // A really lightweight plugin wrapper around the constructor,
-    // preventing against multiple instantiations
-    $.fn[pluginName] = function(options, params) {
-        return this.each(function() {
-            if (!$.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-            } else if (options == 'update') {
-                $.data(this, "plugin_" + pluginName).update(params);
-            } else if (options == 'setDisabled') {
-                $.data(this, "plugin_" + pluginName).setDisabled(params);
-            }
-        });
-    };
+                   //When clicking on the outer button thing, make it open and close the menu
+                   $par.find('.btn-dd').off('click.dropasaur').on('click.dropasaur', function(e) {
+                       e.preventDefault();
+                       e.stopPropagation();
+                       if($(this).hasClass('disabled')){
+                           return;
+                       }
+                       if (!$(this).hasClass('active')) {
+                           $('.btn-dd').removeClass('active');
+                       }
+                       $el.trigger('probable_change');
+                       var selected = $el.val();
+                       $(this).find('li a').each(function() {
+                           $(this).toggleClass('selected', selected == $(this).data('value'));
+                       });
+                       $(this).toggleClass('active');
+                       $.scrollElem().toggleClass('no-overflow');
+                       $(this).find('a').first().addClass('populated');
+                   });
 
-})(jQuery, window, document);
+                   //When clicking on the menu items, select that menu item and close the menu
+                   $par.find('li a').off('click.dropasaur').on('click.dropasaur', function(e) {
+                       e.preventDefault();
+                       e.stopPropagation();
+                       var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
+                       $par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
+                       if ($par.find('.btn-dd-select .sub').length == 0) {
+                           $par.find('.btn-dd-select').append('<span class="sub"></span>')
+                       }
+                       $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                       $el.trigger('change');
+                       $.scrollElem().removeClass('no-overflow');
+                       $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
+                   });
+
+               });
+
+           },
+           setDisabled: function(disabled){
+               this.jqElem.parent().find('.btn-dd').toggleClass('disabled',disabled);
+           }
+       };
+
+       // A really lightweight plugin wrapper around the constructor,
+       // preventing against multiple instantiations
+       $.fn[pluginName] = function(options, params) {
+           return this.each(function() {
+               if (!$.data(this, "plugin_" + pluginName)) {
+                   $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+               } else if (options == 'update') {
+                   $.data(this, "plugin_" + pluginName).update(params);
+               } else if (options == 'setDisabled') {
+                   $.data(this, "plugin_" + pluginName).setDisabled(params);
+               }
+           });
+       };
+   });
+
+}));
