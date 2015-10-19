@@ -50,8 +50,14 @@
                 // iterate through each elem in the jq selector
                 $el.each(function() {
 
-                    var $this = $(this),
-                        $el = $this.wrap('<div class="dropdown-wrapper' + ($this.data('size') ? (' size' + $this.data('size')) : '') + '"></div>'),
+                    // get this
+                    var  $this = $(this);
+
+                    // only do selects
+                    if ($this.prop('tagName').toUpperCase() !== 'SELECT') return;
+
+                    // as you were..
+                    var $el = $this.wrap('<div class="dropdown-wrapper' + ($this.data('size') ? (' size' + $this.data('size')) : '') + '"></div>'),
                         $par = $el.parent(),
                         classList = ($el.attr('class') || '').replace('select-invisible', ''),
                         catchDropdownHtml = '<label aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
