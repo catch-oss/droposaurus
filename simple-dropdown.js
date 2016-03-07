@@ -72,9 +72,13 @@
 
                     $(window).on('resize',function(){
 
+                        // normalise the offset top
+                        var ot = y.offset().top;
+                        if ($('.body'))  ot += $('.body').scrollTop();
+
                         var conf = {
                             position: 'absolute',
-                            top: y.offset().top + y.height(),
+                            top: ot + y.height(),
                         }
 
                         if (el.is('.pin-right')) {
