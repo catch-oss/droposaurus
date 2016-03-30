@@ -1,6 +1,6 @@
 {
   "name": "droposaurus",
-  "version": "0.3.2",
+  "version": "0.2.9",
   "repo": "catch/droposaurus",
   "homepage": "http://gl.catch.co.nz/catch/droposaurus",
   "description": "An enormous dropdown replacement library",
@@ -20,11 +20,11 @@
   "main": "dropasaurus.js",
   "development": {},
   "ignore": [],
-  "_release": "0.3.2",
+  "_release": "0.2.9",
   "_resolution": {
     "type": "version",
-    "tag": "0.3.2",
-    "commit": "ee3274d16506583e36451d5d6b09c59a57f4ddfe"
+    "tag": "0.2.9",
+    "commit": "0d689f6f809f8473f4c7ae3c33047ac6336b0a0d"
   },
   "_source": "git@gl.catch.co.nz:catch/droposaurus.git",
   "_target": "*",
