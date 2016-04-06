@@ -62,7 +62,7 @@
                         classList = ($el.attr('class') || '').replace('select-invisible', ''),
                         catchDropdownHtml = '<label aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
                                                 '<div class="btn-dd">' +
-                                                    '<a href="" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.data('selected') ? ' populated' : '') + '" tabindex="0">' +
+                                                    '<a href="" ' + ($el.data('sourceId') ? ('id="' + $el.data('sourceId') + '"') : '') + ' class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.data('selected') ? ' populated' : '') + '" tabindex="0">' +
                                                     '<span class="main"' +
                                                         ( $el.data('placeholder-color') ? (' style="color:' + $el.data('placeholder-color') + '"') : '' ) +
                                                         '>' + $el.data('placeholder') + '</span>' +
