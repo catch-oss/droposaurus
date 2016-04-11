@@ -62,7 +62,7 @@
                         classList = ($el.attr('class') || '').replace('select-invisible', ''),
                         catchDropdownHtml = '<label aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
                                                 '<div class="btn-dd">' +
-                                                    '<a href="" ' + ($el.data('sourceId') ? ('id="' + $el.data('sourceId') + '"') : '') + ' class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.data('selected') ? ' populated' : '') + '" tabindex="0">' +
+                                                    '<a href="" ' + ($el.data('sourceId') ? ('id="' + $el.data('sourceId') + '"') : '') + ' class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.attr('data-selected') ? ' populated' : '') + '" tabindex="0">' +
                                                     '<span class="main"' +
                                                         ( $el.data('placeholder-color') ? (' style="color:' + $el.data('placeholder-color') + '"') : '' ) +
                                                         '>' + $el.data('placeholder') + '</span>' +
@@ -196,14 +196,13 @@
                             opt = params[i];
                             $el.append('<option value="' + opt.value + '" data-subtext="' + opt.subtext + '">' + (opt.innerHTML ? opt.innerHTML : opt.value) + '<option>');
                         }
-
-                    } else if (typeof params == 'string') {
-
+                    }
+                    else if (typeof params == 'string') {
                         $el.html(params);
-
                     }
 
-                    if (params != undefined) $par.find('ul').html('');
+                    // purge the existing content
+                    $par.find('ul').html('');
 
                     // Add the blank option if allowed
                     // this is stupid - having null values is cool but...
@@ -218,8 +217,9 @@
                         var $this = $(this),
                             txt = $this.text(),
                             val = $this.attr('value') === undefined ? '' : $this.attr('value'),     // $el.val() returns $el.text() if value attr is missing
-                            sel = $el.data('selected') === undefined ? '' : $el.data('selected');   // being consistent
+                            sel = $el.attr('data-selected') === undefined ? '' : $el.attr('data-selected');   // being consistent
 
+                        // append children to the new elem
                         if ($this.text() != '') {
                             $par.find('ul').append(
                                 '<li class="input btn-dd-option catch-dropdown-item">' +
@@ -239,15 +239,29 @@
                     // if no value is supplied by the data elem
                     // find the selected item in the select
                     // else select the first
-                    if ($el.data('selected') === undefined) {
+                    if ($el.attr('data-selected') === undefined) {
+
+                        // look for attr
                         $sel = $el.find('option[selected]');
+
+                        // look for prop
+                        if (!$sel) {
+                            $el.find('option').each(function() {
+                                var $this = $(this);
+                                if ($this.prop('selected')) $sel = $this;
+                            });
+                        }
+
+                        // look for matching value
                         if (!$sel.length) $sel = $el.find('option[value="' + $el.val() + '"]');
+
+                        // get the first
                         if (!$sel.length) $sel = $el.find('option').first();
                     }
                     else {
 
                         // find elem specified by data attr
-                        $sel = $el.find('option[value="' + $el.data('selected') + '"]');
+                        $sel = $el.find('option[value="' + $el.attr('data-selected') + '"]');
 
                         if (!$sel.length) {
 
@@ -255,7 +269,7 @@
                             // so do a looser match
                             $el.find('option').each(function() {
                                 var val = $(this).attr('value') === undefined ? '' : $(this).attr('value');
-                                if ($el.data('selected') == val) $sel = $(this);
+                                if ($el.attr('data-selected') == val) $sel = $(this);
                             });
                         }
                     }
