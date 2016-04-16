@@ -54,7 +54,10 @@
                     var  $this = $(this);
 
                     // only do selects
-                    if ($this.prop('tagName').toUpperCase() !== 'SELECT') return;
+                    if (
+                        $this.prop('tagName') === undefined ||
+                        $this.prop('tagName').toUpperCase() !== 'SELECT'
+                    ) return;
 
                     // as you were..
                     var $el = $this.wrap('<div class="dropdown-wrapper' + ($this.data('size') ? (' size' + $this.data('size')) : '') + '"></div>'),
