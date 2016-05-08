@@ -62,10 +62,18 @@
                     // as you were..
                     var $el = $this.wrap('<div class="dropdown-wrapper' + ($this.data('size') ? (' size' + $this.data('size')) : '') + '"></div>'),
                         $par = $el.parent(),
+                        elIDPre = $el.attr('id') || $el.attr('name') || null,
+                        elID = $el.data('sourceId') || elIDPre + '-dd',
+                        idBase = elID.replace(/[^A-Za-z0-9]+/g, '-'),
+                        id = self.uid(idBase),
+                        idLabel = self.uid(id + '-label'),
                         classList = ($el.attr('class') || '').replace('select-invisible', ''),
-                        catchDropdownHtml = '<label aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '"><span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' + (!$el.data('mobile-only-label') && $el.data('label') || '') + '</span>' +
+                        catchDropdownHtml = '<label id="' + idLabel + '" aria-hidden="true" class="' + ($el.data('error ') ? 'error' : '') + classList + '">' +
+                                                '<span class="span-label' + ($el.data('hideLabel') ? ' hidden' : '') + '">' +
+                                                    (!$el.data('mobile-only-label') && $el.data('label') || '') +
+                                                '</span>' +
                                                 '<div class="btn-dd">' +
-                                                    '<a href="" ' + ($el.data('sourceId') ? ('id="' + $el.data('sourceId') + '"') : '') + ' class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.attr('data-selected') ? ' populated' : '') + '" tabindex="0">' +
+                                                    '<a href="" id="' + id + '" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.attr('data-selected') ? ' populated' : '') + '" tabindex="0">' +
                                                     '<span class="main"' +
                                                         ( $el.data('placeholder-color') ? (' style="color:' + $el.data('placeholder-color') + '"') : '' ) +
                                                         '>' + $el.data('placeholder') + '</span>' +
@@ -84,7 +92,6 @@
                     //set up the proper display of the select and list elements
                     $el.after(catchDropdownHtml);
                     $el.addClass('hidden');
-
 
                     // update the options
                     self.update();
@@ -105,7 +112,7 @@
 
                     //tab, enter, arrow keys
                     var focused = -1
-                    $(document).on('keydown.dropasaur', function(e) {
+                    $(document).on('keydown.droposaur', function(e) {
                         //down = 40
                         if (e.keyCode == 40) {
                             if ($par.find('.btn-dd.active').length) {
@@ -177,6 +184,22 @@
                 this.jqElem.addClass('droposaurusised');
             },
 
+            uid: function(idBase) {
+
+                // init vars
+                var i = 2,
+                    elementID = idBase;
+
+                // Create an ID if there isn't one
+                while (!elementID || $('#' + elementID).length) {
+                    elementID = idBase + i;
+                    i++;
+                }
+
+                // return
+                return elementID;
+            },
+
             update: function(params) {
 
                 var $el = this.jqElem,
@@ -215,19 +238,25 @@
                     }
 
                     //populate the list with the select items
-                    $el.find('option').each(function() {
+                    $el.find('option').each(function(idx) {
 
                         var $this = $(this),
                             txt = $this.text(),
+                            elID = self.jqElem.attr('id') || self.jqElem.attr('name') || null,
+                            idBase = (elID + '-' + $this.val() + '-' + idx).replace(/[^A-Za-z0-9]+/g, '-'),
+                            id = self.uid(idBase),
+                            triggerId = self.uid(id + '-trigger'),
                             val = $this.attr('value') === undefined ? '' : $this.attr('value'),     // $el.val() returns $el.text() if value attr is missing
                             sel = $el.attr('data-selected') === undefined ? '' : $el.attr('data-selected');   // being consistent
 
                         // append children to the new elem
                         if ($this.text() != '') {
                             $par.find('ul').append(
-                                '<li class="input btn-dd-option catch-dropdown-item">' +
+                                '<li id="' + id + '" ' +
+                                    'class="input btn-dd-option catch-dropdown-item">' +
                                     // this add connection thing is BS
                                     '<a class="catch-dropdown-link' + (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
+                                       'id="' + triggerId + ' "' +
                                        'href="" ' +
                                        'tabindex="-1" ' +
                                        'data-value="' + val + '">' +
@@ -287,7 +316,7 @@
                     $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
 
                     //When clicking on the outer button thing, make it open and close the menu
-                    $par.find('.btn-dd').off('click.dropasaur').on('click.dropasaur', function(e) {
+                    $par.find('.btn-dd').off('click.droposaur').on('click.droposaur', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         if($(this).hasClass('disabled')){
@@ -307,7 +336,7 @@
                     });
 
                     //When clicking on the menu items, select that menu item and close the menu
-                    $par.find('li a').off('click.dropasaur').on('click.dropasaur', function(e) {
+                    $par.find('li a').off('click.droposaur').on('click.droposaur', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
