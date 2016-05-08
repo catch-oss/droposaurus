@@ -256,7 +256,7 @@
                                     'class="input btn-dd-option catch-dropdown-item">' +
                                     // this add connection thing is BS
                                     '<a class="catch-dropdown-link' + (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
-                                       'id="' + triggerId + ' "' +
+                                       'id="' + triggerId + '"' +
                                        'href="" ' +
                                        'tabindex="-1" ' +
                                        'data-value="' + val + '">' +
