@@ -104,6 +104,12 @@
                         }
                     });
 
+                    $.listen('parsley:field:error',function(parsleyField){
+                        if(parsleyField.$element.attr('name') == $this.attr('name')){
+                            $('#'+idLabel).addClass('error');
+                        }
+                    });
+
                     //When clicking off the menu, close the menu
                     $('html').click(function(e) {
                         $par.find('.btn-dd').removeClass('active');
@@ -126,6 +132,7 @@
                                 $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
                                 $el.trigger('change');
                                 $el.trigger('changeDrop',[$(focusedElem).data('value')]);
+                                $this.removeClass('error');
                             }
                         }
                         //up = 38
@@ -141,6 +148,7 @@
                                 $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
                                 $el.trigger('change');
                                 $el.trigger('changeDrop',[$(focusedElem).data('value')]);
+                                $this.removeClass('error');
                             }
                         }
                         //tab
@@ -309,6 +317,7 @@
                     // select the current value we found above
                     $sel.prop('selected', true);
                     $el.trigger('change');
+                    $(this).removeClass('error');
                     $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '');
                     if ($par.find('.btn-dd-select .sub').length == 0) {
                         $par.find('.btn-dd-select').append('<span class="sub"></span>')
@@ -326,6 +335,7 @@
                             $('.btn-dd').removeClass('active');
                         }
                         $el.trigger('probable_change');
+                        $(this).closest('.catch-dropdown').removeClass('error');
                         var selected = $el.val();
                         $(this).find('li a').each(function() {
                             $(this).toggleClass('selected', selected == $(this).data('value'));
@@ -346,6 +356,7 @@
                         }
                         $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
                         $el.trigger('change');
+                        $(this).closest('.catch-dropdown').removeClass('error');
                         $.scrollElem(true).removeClass('no-overflow');
                         $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
                     });
