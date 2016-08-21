@@ -104,11 +104,12 @@
                         }
                     });
 
-                    $.listen('parsley:field:error',function(parsleyField){
-                        if(parsleyField.$element.attr('name') == $this.attr('name')){
-                            $('#'+idLabel).addClass('error');
-                        }
-                    });
+                    if($.listen)
+                        $.listen('parsley:field:error',function(parsleyField){
+                            if(parsleyField.$element.attr('name') == $this.attr('name')){
+                                $('#'+idLabel).addClass('error');
+                            }
+                        });
 
                     //When clicking off the menu, close the menu
                     $('html').click(function(e) {
