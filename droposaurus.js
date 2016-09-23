@@ -356,7 +356,41 @@
                             $par.find('.btn-dd-select').append('<span class="sub"></span>')
                         }
                         $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
-                        $el.trigger('change');
+
+                        // reactjs compatibility
+                        var doOldEvent = true;
+                        if ($el.attr('data-reactid')) {
+                            doOldEvent = false;
+                            var eType = 'change', target = $el[0];
+
+                            // test if the old workaround is there by checking if change.intercept attached
+                            var jqEvents = $._data(target, 'events');
+                            if (jqEvents && jqEvents[eType]) $.each(jqEvents[eType], function() {
+                                if ((this.type == eType) && (this.namespace == 'intercept'))
+                                    return (doOldEvent = true) && false;
+                            });
+
+                            // do native event if old workaround not there
+                            if (!doOldEvent) {
+                                var event;
+
+                                //execute native event (1 = latest, 2 = older browsers , 3 = < ie9)
+                                if (typeof window.CustomEvent === 'function') {
+                                    target.dispatchEvent(new Event(eType, {'bubbles':true, 'cancelable':true}));
+                                } else if (document.createEvent) {
+                                    event = document.createEvent('Event');
+                                    event.initEvent(eType, true, true);
+                                    target.dispatchEvent(event);
+                                } else {
+                                    event = document.createEventObject();
+                                    target.fireEvent('on' + eType, event);
+                                }
+                            }
+                        }
+
+                        if (doOldEvent) {
+                            $el.trigger('change');
+                        }
                         $(this).closest('.catch-dropdown').removeClass('error');
                         $.scrollElem(true).removeClass('no-overflow');
                         $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
