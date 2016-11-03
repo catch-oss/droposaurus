@@ -20,7 +20,8 @@
         // Create the defaults once
         var pluginName = "catchDropdown",
             defaults = {
-                touchBody: true
+                touchBody: true,
+                jsxHandling: false
             };
 
         // The actual plugin constructor
@@ -359,20 +360,9 @@
 
                         // reactjs compatibility
                         var doOldEvent = true;
-                        if ($el.attr('data-reactid')) {
+                        if ($el.attr('data-reactid') && this.options.jsxHandling) {
                             doOldEvent = false;
-                            var eType = 'change', target = $el[0];
-
-                            // test if the old workaround is there by checking if change.intercept attached
-                            var jqEvents = $._data(target, 'events');
-                            if (jqEvents && jqEvents[eType]) $.each(jqEvents[eType], function() {
-                                if ((this.type == eType) && (this.namespace == 'intercept'))
-                                    return (doOldEvent = true) && false;
-                            });
-
-                            // do native event if old workaround not there
-                            if (!doOldEvent) {
-                                var event;
+                            var eType = 'change', target = $el[0], event;
 
                                 //execute native event (1 = latest, 2 = older browsers , 3 = < ie9)
                                 if (typeof window.CustomEvent === 'function') {
@@ -385,7 +375,6 @@
                                     event = document.createEventObject();
                                     target.fireEvent('on' + eType, event);
                                 }
-                            }
                         }
 
                         if (doOldEvent) {
