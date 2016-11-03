@@ -360,7 +360,7 @@
 
                         // reactjs compatibility
                         var doOldEvent = true;
-                        if ($el.attr('data-reactid') && this.options.jsxHandling) {
+                        if ($el.attr('data-reactid') && self.options.jsxHandling) {
                             doOldEvent = false;
                             var eType = 'change', target = $el[0], event;
 
