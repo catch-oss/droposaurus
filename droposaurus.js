@@ -359,25 +359,23 @@
                         $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
 
                         // reactjs compatibility
-                        var doOldEvent = true;
-                        if ($el.attr('data-reactid') && self.options.jsxHandling) {
-                            doOldEvent = false;
+                        if ($el.attr('data-droposaur-firenative') && self.options.jsxHandling) {
                             var eType = 'change', target = $el[0], event;
 
                                 //execute native event (1 = latest, 2 = older browsers , 3 = < ie9)
                                 if (typeof window.CustomEvent === 'function') {
                                     target.dispatchEvent(new Event(eType, {'bubbles':true, 'cancelable':true}));
+
                                 } else if (document.createEvent) {
                                     event = document.createEvent('Event');
                                     event.initEvent(eType, true, true);
                                     target.dispatchEvent(event);
+
                                 } else {
                                     event = document.createEventObject();
                                     target.fireEvent('on' + eType, event);
                                 }
-                        }
-
-                        if (doOldEvent) {
+                        } else {
                             $el.trigger('change');
                         }
                         $(this).closest('.catch-dropdown').removeClass('error');
