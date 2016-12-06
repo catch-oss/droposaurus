@@ -20,7 +20,8 @@
         // Create the defaults once
         var pluginName = "catchDropdown",
             defaults = {
-                touchBody: true
+                touchBody: true,
+                jsxHandling: false
             };
 
         // The actual plugin constructor
@@ -356,7 +357,27 @@
                             $par.find('.btn-dd-select').append('<span class="sub"></span>')
                         }
                         $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
-                        $el.trigger('change');
+
+                        // reactjs compatibility
+                        if ($el.attr('data-droposaur-firenative') && self.options.jsxHandling) {
+                            var eType = 'change', target = $el[0], event;
+
+                                //execute native event (1 = latest, 2 = older browsers , 3 = < ie9)
+                                if (typeof window.CustomEvent === 'function') {
+                                    target.dispatchEvent(new Event(eType, {'bubbles':true, 'cancelable':true}));
+
+                                } else if (document.createEvent) {
+                                    event = document.createEvent('Event');
+                                    event.initEvent(eType, true, true);
+                                    target.dispatchEvent(event);
+
+                                } else {
+                                    event = document.createEventObject();
+                                    target.fireEvent('on' + eType, event);
+                                }
+                        } else {
+                            $el.trigger('change');
+                        }
                         $(this).closest('.catch-dropdown').removeClass('error');
                         $.scrollElem(true).removeClass('no-overflow');
                         $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
