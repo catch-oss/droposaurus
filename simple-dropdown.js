@@ -65,7 +65,7 @@
 
                     $.scrollElem().append(x);
 
-                    var lockY = y.offset().top + y.height();
+                    var lockY = y.offset().top + y.height() + $.scrollElem().scrollTop();
 
                     x.wrap(
                         '<div class="simple-dd simple-dd-generated ' + (el.is('.pin-right') ? 'pin-right' : '') + '"' +
@@ -76,7 +76,7 @@
 
                         var conf = {
                             position: 'absolute',
-                            top: y.offset().top + y.height() // lockY,
+                            top: y.offset().top + y.height() + $.scrollElem().scrollTop() // lockY,
                         }
 
                         if (el.is('.pin-right')) {
