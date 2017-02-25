@@ -76,7 +76,7 @@
 
                         var conf = {
                             position: 'absolute',
-                            top: lockY,
+                            top: y.offset().top + y.height() // lockY,
                         }
 
                         if (el.is('.pin-right')) {
