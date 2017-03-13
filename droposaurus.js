@@ -105,20 +105,21 @@
                         }
                     });
 
-                    if($.listen)
+                    if ($.listen)
                         $.listen('parsley:field:error',function(parsleyField){
                             if(parsleyField.$element.attr('name') == $this.attr('name')){
                                 $('#'+idLabel).addClass('error');
                             }
                         });
 
-                    //When clicking off the menu, close the menu
+                    // When clicking off the menu, close the menu
                     $('html').click(function(e) {
                         $par.find('.btn-dd').removeClass('active');
+                        $('html').removeClass('s-dd-active');
                         $.scrollElem(true).removeClass('no-overflow');
                     });
 
-                    //tab, enter, arrow keys
+                    // tab, enter, arrow keys
                     var focused = -1
                     $(document).on('keydown.droposaur', function(e) {
                         //down = 40
@@ -160,6 +161,7 @@
                                 var $sel = $el.find('option[value="' + $el.val() + '"]');
                                 e.preventDefault();
                                 active.removeClass('active');
+                                $('html').removeClass('s-dd-active');
                                 $.scrollElem(true).removeClass('no-overflow');
                                 active.find('a').first().addClass('populated');
                                 active.find('a').first().focus();
@@ -177,6 +179,7 @@
                                 var $sel = $el.find('option[value="' + $el.val() + '"]');
                                 e.preventDefault();
                                 active.removeClass('active');
+                                $('html').removeClass('s-dd-active');
                                 $.scrollElem(true).removeClass('no-overflow');
                                 active.find('a').first().addClass('populated');
                                 active.find('a').first().focus();
@@ -326,11 +329,11 @@
                     }
                     $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
 
-                    //When clicking on the outer button thing, make it open and close the menu
+                    // When clicking on the outer button thing, make it open and close the menu
                     $par.find('.btn-dd').off('click.droposaur').on('click.droposaur', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        if($(this).hasClass('disabled')){
+                        if ($(this).hasClass('disabled')){
                             return;
                         }
                         if (!$(this).hasClass('active')) {
@@ -343,15 +346,19 @@
                             $(this).toggleClass('selected', selected == $(this).data('value'));
                         });
                         $(this).toggleClass('active');
+                        $('html').toggleClass('s-dd-active');
                         $.scrollElem(true).toggleClass('no-overflow');
                         $(this).find('a').first().addClass('populated');
                     });
 
-                    //When clicking on the menu items, select that menu item and close the menu
+                    // When clicking on the menu items, select that menu item and close the menu
                     $par.find('li a').off('click.droposaur').on('click.droposaur', function(e) {
+
                         e.preventDefault();
                         e.stopPropagation();
+
                         var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
+
                         $par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
                         if ($par.find('.btn-dd-select .sub').length == 0) {
                             $par.find('.btn-dd-select').append('<span class="sub"></span>')
@@ -379,6 +386,7 @@
                             $el.trigger('change');
                         }
                         $(this).closest('.catch-dropdown').removeClass('error');
+                        $('html').removeClass('s-dd-active');
                         $.scrollElem(true).removeClass('no-overflow');
                         $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
                     });
