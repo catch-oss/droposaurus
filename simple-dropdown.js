@@ -55,13 +55,11 @@
                     outEl = this.jqElem;
 
                 el.each(function(){
-                    var el = $(this);
 
-                    var w = el.find('ul');
-
-                    var y = w.parent();
-
-                    var x = w.remove();
+                    var el = $(this),
+                        w = el.find('ul'),
+                        y = w.parent(),
+                        x = w.remove();
 
                     $.scrollElem().append(x);
 
@@ -69,7 +67,7 @@
 
                     x.wrap(
                         '<div class="simple-dd simple-dd-generated ' + (el.is('.pin-right') ? 'pin-right' : '') + '"' +
-                        '     id="' + el.data('id') + '"></div>'
+                        '     id="' + el.attr('data-id') + '"></div>'
                     );
 
                     $(window).on('resize',function(){
@@ -91,29 +89,37 @@
 
                     var focused = -1;
 
-                    //When clicking on the outer button thing, make it open and close the menu
-                    el.find('a').first().click(function(e){
-                        e.preventDefault();
-                        e.stopPropagation();
-                        // console.log(outEl)
-                        focused = -1;
-                        if($('#'+el.data('id')).hasClass('active')){
+                    // When clicking on the outer button thing, make it open and close the menu
+                    el.find('a').first()
+                        .off('click.smpdd')
+                        .on('click.smpdd', function(e) {
+
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            focused = -1;
+
+                            if ($('#' + el.attr('data-id')).hasClass('active')) {
+
+                                $('.simple-dd').removeClass('active');
+                                outEl.removeClass('active');
+                                return;
+                            }
+
                             $('.simple-dd').removeClass('active');
-                            outEl.removeClass('active');
-                            return
-                        }
-                        $('.simple-dd').removeClass('active');
-                        el.trigger('probable_change');
-                        $('#'+el.data('id')).toggleClass('active');
-                        outEl.toggleClass('active');
+                            el.trigger('probable_change');
+                            $('#' + el.attr('data-id')).addClass('active');
+                            outEl.addClass('active');
 
-                        $(window).trigger('resize');
-                    })
+                            $(window).trigger('resize');
+                        });
 
-                    //When clicking off the menu, close the menu
-                    $('html').click(function(e){
-                        $('.simple-dd').removeClass('active');
-                    })
+                    // When clicking off the menu, close the menu
+                    $('html')
+                        .off('click.smpdd')
+                        .on('click.smpdd', function(e) {
+                            $('.simple-dd').removeClass('active');
+                        });
 
                     //tab, enter, arrow keys
                     var shiftDown = false;
@@ -122,15 +128,16 @@
                             shiftDown=false;
                         }
                     });
+
                     $(document).keydown(function(e){
                         //down = 40
                         if(e.keyCode == 16){
                             shiftDown=true;
                         }
                         else if(e.keyCode == 40){
-                            if($('#'+el.data('id')).hasClass('active')){
+                            if($('#'+el.attr('data-id')).hasClass('active')){
                                 e.preventDefault();
-                                var options = $('#'+el.data('id')).find('a');
+                                var options = $('#'+el.attr('data-id')).find('a');
                                 if(focused < options.length-1){ focused++; }
                                 var focusedElem = options[focused];
                                 focusedElem.focus();
@@ -138,8 +145,8 @@
                         }
                         //tab = 9
                         else if(e.keyCode == 9){
-                            if($('#'+el.data('id')).hasClass('active')){
-                                var options = $('#'+el.data('id')).find('a');
+                            if($('#'+el.attr('data-id')).hasClass('active')){
+                                var options = $('#'+el.attr('data-id')).find('a');
                                 if(focused < options.length-1 && !shiftDown){
                                     focused++;
                                     var focusedElem = options[focused];
@@ -175,9 +182,9 @@
                         }
                         //up = 38
                         else if(e.keyCode == 38){
-                            if($('#'+el.data('id')).hasClass('active')){
+                            if($('#'+el.attr('data-id')).hasClass('active')){
                                 e.preventDefault();
-                                var options = $('#'+el.data('id')).find('a');
+                                var options = $('#'+el.attr('data-id')).find('a');
                                 if(focused > 0){ focused--; }
                                 var focusedElem = options[focused];
                                 focusedElem.focus();
@@ -185,7 +192,7 @@
                         }
                         //esc = 27
                         else if(e.keyCode == 27){
-                            if($('#'+el.data('id')).hasClass('active')){
+                            if($('#'+el.attr('data-id')).hasClass('active')){
                                 $('.simple-dd').removeClass('active');
                             }
                         }
