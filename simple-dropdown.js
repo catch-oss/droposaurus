@@ -34,7 +34,7 @@
             this.options = $.extend( {}, defaults, options );
             this._defaults = defaults;
             this._name = pluginName;
-            if (!this.jqElem.is('.dropasaurusised, .simple-dd-generated')) this.init();
+            if (!this.jqElem.is('.droposaurusised, .simple-dd-generated')) this.init();
         }
 
         Plugin.prototype = {
@@ -200,7 +200,9 @@
                 });
 
                 // add the class so we know its all initialised
-                this.jqElem.addClass('dropasaurusised');
+                this.jqElem
+                    .addClass('droposaurusised')
+                    .trigger('droposaurusised');
 
             }
         };

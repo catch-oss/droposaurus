@@ -194,7 +194,9 @@
                 });
 
                 // add the class so we know its all initialised
-                this.jqElem.addClass('droposaurusised');
+                this.jqElem
+                    .addClass('droposaurusised')
+                    .trigger('droposaurusised');
             },
 
             uid: function(idBase) {
