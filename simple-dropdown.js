@@ -59,7 +59,7 @@
                     var el = $(this),
                         w = el.find('ul'),
                         y = w.parent(),
-                        x = w.remove();
+                        x = w.detach();
 
                     $.scrollElem().append(x);
 
