@@ -133,6 +133,7 @@
                                 var focusedElem = options[focused]
                                 focusedElem.focus()
                                 $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
+                                self.updateAttrs();
                                 $el.trigger('change');
                                 $el.trigger('changeDrop',[$(focusedElem).data('value')]);
                                 $this.removeClass('error');
@@ -149,6 +150,7 @@
                                 var focusedElem = options[focused]
                                 focusedElem.focus()
                                 $el.find('option[value="' + $(focusedElem).data('value') + '"]').prop('selected', true);
+                                self.updateAttrs();
                                 $el.trigger('change');
                                 $el.trigger('changeDrop',[$(focusedElem).data('value')]);
                                 $this.removeClass('error');
@@ -323,6 +325,7 @@
 
                     // select the current value we found above
                     $sel.prop('selected', true);
+                    self.updateAttrs();
                     $el.trigger('change');
                     $(this).removeClass('error');
                     $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '');
@@ -361,6 +364,8 @@
 
                         var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
 
+                        self.updateAttrs();
+
                         $par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
                         if ($par.find('.btn-dd-select .sub').length == 0) {
                             $par.find('.btn-dd-select').append('<span class="sub"></span>')
@@ -369,21 +374,22 @@
 
                         // reactjs compatibility
                         if ($el.attr('data-droposaur-firenative') && self.options.jsxHandling) {
+
                             var eType = 'change', target = $el[0], event;
 
-                                //execute native event (1 = latest, 2 = older browsers , 3 = < ie9)
-                                if (typeof window.CustomEvent === 'function') {
-                                    target.dispatchEvent(new Event(eType, {'bubbles':true, 'cancelable':true}));
+                            //execute native event (1 = latest, 2 = older browsers , 3 = < ie9)
+                            if (typeof window.CustomEvent === 'function') {
+                                target.dispatchEvent(new Event(eType, {'bubbles':true, 'cancelable':true}));
 
-                                } else if (document.createEvent) {
-                                    event = document.createEvent('Event');
-                                    event.initEvent(eType, true, true);
-                                    target.dispatchEvent(event);
+                            } else if (document.createEvent) {
+                                event = document.createEvent('Event');
+                                event.initEvent(eType, true, true);
+                                target.dispatchEvent(event);
 
-                                } else {
-                                    event = document.createEventObject();
-                                    target.fireEvent('on' + eType, event);
-                                }
+                            } else {
+                                event = document.createEventObject();
+                                target.fireEvent('on' + eType, event);
+                            }
                         } else {
                             $el.trigger('change');
                         }
@@ -395,6 +401,13 @@
 
                 });
 
+            },
+            updateAttrs: function() {
+                this.jqElem.find('option').each(function() {
+                    $(this).prop('selected')
+                        ? $(this).attr('selected', 'selected')
+                        : $(this).removeAttr('selected');
+                });
             },
             setDisabled: function(disabled){
                 this.jqElem.parent().find('.btn-dd').toggleClass('disabled',disabled);
