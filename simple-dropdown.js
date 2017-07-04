@@ -38,56 +38,78 @@
         }
 
         Plugin.prototype = {
+            uid: function(idBase) {
+
+                // init vars
+                var i = 2,
+                    elementID = idBase;
+
+                // Create an ID if there isn't one
+                while (!elementID || $('#' + elementID).length) {
+                    elementID = idBase + i;
+                    i++;
+                }
+
+                // return
+                return elementID;
+            },
             init: function () {
 
-                // Place initialization logic here
-                // You already have access to the DOM element and
-                // the options via the instance, e.g. this.element
-                // and this.options
-                // you can add more functions like the one below and
-                // call them like so: this.yourOtherFunction(this.element, this.options).
-
-                // touch my body
+                // touch my body?
                 if (this.options.touchBody) $.addBody();
 
-                var el = this.jqElem,
-                    self = this,
+                // scope some variables
+                var self = this,
                     outEl = this.jqElem;
 
-                el.each(function(){
+                // attach stuff to each element in the jqArray
+                outEl.each(function() {
 
+                    // scope vars
                     var el = $(this),
                         w = el.find('ul'),
                         y = w.parent(),
-                        x = w.detach();
+                        x = w.detach(),
+                        id = self.uid(el.attr('data-id') || 'dd'),
+                        lockY = y.offset().top + y.height() + $.scrollElem().scrollTop(),
+                        focused = -1,
+                        shiftDown = false;
 
+                    // move list to end of doc
                     $.scrollElem().append(x);
 
-                    var lockY = y.offset().top + y.height() + $.scrollElem().scrollTop();
-
+                    // wrap the list in the dd wrapper
                     x.wrap(
-                        '<div class="simple-dd simple-dd-generated ' + (el.is('.pin-right') ? 'pin-right' : '') + '"' +
-                        '     id="' + el.attr('data-id') + '"></div>'
+                        '<div '+
+                            'class="' +
+                                'simple-dd ' +
+                                'simple-dd-generated ' +
+                                (el.is('.pin-right') ? 'pin-right' : '') +
+                            '" ' +
+                            'id="' + id + '">' +
+                        '</div>'
                     );
 
-                    $(window).on('resize',function(){
+                    // bind resize handler
+                    $(window)
+                        .off('resize.' + id)
+                        .on('resize.' + id, function() {
 
-                        var conf = {
-                            position: 'absolute',
-                            top: y.offset().top + y.height() + $.scrollElem().scrollTop() // lockY,
-                        }
+                            // create the CSS obj
+                            var conf = {
+                                position: 'absolute',
+                                top: y.offset().top + y.height() + $.scrollElem().scrollTop() // lockY,
+                            }
 
-                        if (el.is('.pin-right')) {
-                            conf['left'] = y.offset().left - x.outerWidth() + y.outerWidth();
-                        } else {
-                            conf['left'] = y.offset().left;
-                        }
+                            // update based on pin right flag
+                            conf['left'] = el.is('.pin-right')
+                                ? y.offset().left - x.outerWidth() + y.outerWidth()
+                                : conf['left'] = y.offset().left;
 
-                        x.parent().css(conf);
-                    });
-
-
-                    var focused = -1;
+                            // apply the css
+                            x.parent().css(conf);
+                        })
+                        .trigger('resize');
 
                     // When clicking on the outer button thing, make it open and close the menu
                     el.find('a').first()
@@ -99,8 +121,7 @@
 
                             focused = -1;
 
-                            if ($('#' + el.attr('data-id')).hasClass('active')) {
-
+                            if ($('#' + id).hasClass('active')) {
                                 $('.simple-dd').removeClass('active');
                                 outEl.removeClass('active');
                                 return;
@@ -108,7 +129,7 @@
 
                             $('.simple-dd').removeClass('active');
                             el.trigger('probable_change');
-                            $('#' + el.attr('data-id')).addClass('active');
+                            $('#' + id).addClass('active');
                             outEl.addClass('active');
 
                             $(window).trigger('resize');
@@ -121,86 +142,91 @@
                             $('.simple-dd').removeClass('active');
                         });
 
-                    //tab, enter, arrow keys
-                    var shiftDown = false;
-                    $(document).keyup(function(e){
-                        if(e.keyCode == 16){
-                            shiftDown=false;
-                        }
-                    });
+                    // tab, enter, arrow keys
+                    $(document)
+                        .off('keyup.' + id)
+                        .on('keyup.' + id, function(e){
+                            if (e.keyCode == 16) shiftDown = false;
+                        });
 
-                    $(document).keydown(function(e){
-                        //down = 40
-                        if(e.keyCode == 16){
-                            shiftDown=true;
-                        }
-                        else if(e.keyCode == 40){
-                            if($('#'+el.attr('data-id')).hasClass('active')){
-                                e.preventDefault();
-                                var options = $('#'+el.attr('data-id')).find('a');
-                                if(focused < options.length-1){ focused++; }
-                                var focusedElem = options[focused];
-                                focusedElem.focus();
+                    $(document)
+                        .off('keydown.' + id)
+                        .on('keydown.' + id, function(e) {
+
+                            // down = 40
+                            if (e.keyCode == 16) {
+                                shiftDown=true;
                             }
-                        }
-                        //tab = 9
-                        else if(e.keyCode == 9){
-                            if($('#'+el.attr('data-id')).hasClass('active')){
-                                var options = $('#'+el.attr('data-id')).find('a');
-                                if(focused < options.length-1 && !shiftDown){
-                                    focused++;
+                            else if (e.keyCode == 40) {
+                                if($('#' + id).hasClass('active')){
+                                    e.preventDefault();
+                                    var options = $('#' + id).find('a');
+                                    if(focused < options.length-1){ focused++; }
                                     var focusedElem = options[focused];
                                     focusedElem.focus();
-                                    e.preventDefault();
                                 }
-                                else if(shiftDown){
-                                    if(focused > 0){
-                                        focused--;
+                            }
+
+                            // tab = 9
+                            else if(e.keyCode == 9){
+                                if($('#' + id).hasClass('active')){
+                                    var options = $('#' + id).find('a');
+                                    if(focused < options.length-1 && !shiftDown){
+                                        focused++;
                                         var focusedElem = options[focused];
                                         focusedElem.focus();
+                                        e.preventDefault();
                                     }
-                                    else {
-                                        focused--;
-                                        $('.simple-dd').removeClass('active');
-                                        el.find('a').first().focus();
-                                    }
-                                    e.preventDefault();
-                                }
-                                else {
-                                    focused++;
-                                    if(el.data('next')){
-                                        $(el.data('next')).find('a').focus();
-                                        $('.simple-dd').removeClass('active');
+                                    else if(shiftDown){
+                                        if(focused > 0){
+                                            focused--;
+                                            var focusedElem = options[focused];
+                                            focusedElem.focus();
+                                        }
+                                        else {
+                                            focused--;
+                                            $('.simple-dd').removeClass('active');
+                                            el.find('a').first().focus();
+                                        }
                                         e.preventDefault();
                                     }
                                     else {
-                                        el.find('a').focus();
-                                        $('.simple-dd').removeClass('active');
+                                        focused++;
+                                        if(el.data('next')){
+                                            $(el.data('next')).find('a').focus();
+                                            $('.simple-dd').removeClass('active');
+                                            e.preventDefault();
+                                        }
+                                        else {
+                                            el.find('a').focus();
+                                            $('.simple-dd').removeClass('active');
+                                        }
                                     }
                                 }
                             }
-                        }
-                        //up = 38
-                        else if(e.keyCode == 38){
-                            if($('#'+el.attr('data-id')).hasClass('active')){
-                                e.preventDefault();
-                                var options = $('#'+el.attr('data-id')).find('a');
-                                if(focused > 0){ focused--; }
-                                var focusedElem = options[focused];
-                                focusedElem.focus();
+
+                            //up = 38
+                            else if(e.keyCode == 38){
+                                if($('#' + id).hasClass('active')){
+                                    e.preventDefault();
+                                    var options = $('#' + id).find('a');
+                                    if(focused > 0){ focused--; }
+                                    var focusedElem = options[focused];
+                                    focusedElem.focus();
+                                }
                             }
-                        }
-                        //esc = 27
-                        else if(e.keyCode == 27){
-                            if($('#'+el.attr('data-id')).hasClass('active')){
-                                $('.simple-dd').removeClass('active');
+
+                            //esc = 27
+                            else if(e.keyCode == 27){
+                                if($('#' + id).hasClass('active')){
+                                    $('.simple-dd').removeClass('active');
+                                }
                             }
-                        }
-                    });
+                        });
                 });
 
                 // add the class so we know its all initialised
-                this.jqElem
+                outEl
                     .addClass('droposaurusised')
                     .trigger('droposaurusised');
 
