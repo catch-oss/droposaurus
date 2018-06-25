@@ -52,7 +52,11 @@
                 $el.each(function() {
 
                     // get this
-                    var  $this = $(this);
+                    var  $this = $(this),
+                        mainClass = $this.attr('data-ds-main-class') ?
+                            $this.attr('data-ds-main-class') : 'main',
+                        subtextClass = $this.attr('data-ds-subtext-class') ?
+                            $this.attr('data-ds-subtext-class') : 'sub';
 
                     // only do selects
                     if (
@@ -75,15 +79,17 @@
                                                 '</span>' +
                                                 '<div class="btn-dd">' +
                                                     '<a href="" id="' + id + '" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.attr('data-selected') ? ' populated' : '') + '" tabindex="0">' +
-                                                    '<span class="main"' +
+                                                    '<span class="' + mainClass + '"' +
                                                         ( $el.data('placeholder-color') ? (' style="color:' + $el.data('placeholder-color') + '"') : '' ) +
                                                         '>' + $el.data('placeholder') + '</span>' +
-                                                    ($el.data('subtext') ? ("<span class='sub'>" + $el.data('subtext') + "</span>") : "") + '</a>' +
+                                                    ($el.data('subtext') ? ("<span class='" + subtextClass + "'>" + $el.data('subtext') + "</span>") : "") + '</a>' +
                                                     '<div class="btn-dd-options">' +
-                                                        '<div class="btn-dd-header">' +
-                                                            $el.data('label') +
-                                                            ' <a class="btn-dd-close">Close</a>' +
-                                                        '</div>' +
+                                                        ($el.data('label') ?
+                                                            '<div class="btn-dd-header">' +
+                                                                $el.data('label') +
+                                                                ' <a class="btn-dd-close">Close</a>' +
+                                                                '</div>'
+                                                        : '') +
                                                         '<ul></ul>' +
                                                     '</div>' +
                                                 '</div>' +
@@ -92,7 +98,21 @@
 
                     //set up the proper display of the select and list elements
                     $el.after(catchDropdownHtml);
-                    $el.addClass('hidden');
+                    if ($el.attr('data-ds-native-mobile')) {
+                        $el.off('change.nativeMirror')
+                            .on('change.nativeMirror', function(e) {
+                                // test for native click
+                                if (
+                                    e.originalEvent &&
+                                    (e.originalEvent.currentTarget == e.currentTarget)
+                                ) {
+                                    $('.catch-dropdown-item [data-value="' + e.target.value + '"]')
+                                        .trigger('click');
+                                }
+                            });
+                    } else {
+                        $el.addClass('hidden');
+                    }
 
                     // update the options
                     self.update();
@@ -106,8 +126,8 @@
                     });
 
                     if ($.listen)
-                        $.listen('parsley:field:error',function(parsleyField){
-                            if(parsleyField.$element.attr('name') == $this.attr('name')){
+                        $.listen('parsley:field:error', function(parsleyField) {
+                            if (parsleyField.$element.attr('name') == $this.attr('name')) {
                                 $('#'+idLabel).addClass('error');
                             }
                         });
@@ -167,11 +187,11 @@
                                 $.scrollElem(true).removeClass('no-overflow');
                                 active.find('a').first().addClass('populated');
                                 active.find('a').first().focus();
-                                active.find('a .main').first().text($sel.text());
-                                if (active.find('a .sub').length == 0) {
-                                    active.find('a').append('<span class="sub"></span>')
+                                active.find('a .' + mainClass).first().text($sel.attr('data-main-text') || $sel.text());
+                                if (active.find('a .' + subtextClass).length == 0) {
+                                    active.find('a').append('<span class="' + subtextClass + '"></span>');
                                 }
-                                active.find('a .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                                active.find('a .' + subtextClass).first().text($el.data('subtext') || $sel.data('subtext') || '');
                             }
                         }
                         //enter
@@ -185,11 +205,11 @@
                                 $.scrollElem(true).removeClass('no-overflow');
                                 active.find('a').first().addClass('populated');
                                 active.find('a').first().focus();
-                                active.find('a .main').first().text($sel.text());
-                                if (active.find('a .sub').length == 0) {
-                                    active.find('a').append('<span class="sub"></span>')
+                                active.find('a .' + mainClass).first().text($sel.attr('data-main-text') || $sel.text());
+                                if (active.find('a .' + subtextClass).length == 0) {
+                                    active.find('a').append('<span class="' + subtextClass + '"></span>');
                                 }
-                                active.find('a .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                                active.find('a .' + subtextClass).first().text($el.data('subtext') || $sel.data('subtext') || '');
                             }
                         }
                     });
@@ -221,11 +241,13 @@
 
                 var $el = this.jqElem,
                     self = this,
+                    mainClass = $el.attr('data-ds-main-class') ? $el.attr('data-ds-main-class') : 'main',
+                    subtextClass = $el.attr('data-ds-subtext-class') ? $el.attr('data-ds-subtext-class') : 'sub',
                     $sel,
                     opt,
                     i;
 
-                $el.each(function(){
+                $el.each(function() {
 
                     var $el = $(this),
                         $par = $el.closest('.dropdown-wrapper');
@@ -235,7 +257,7 @@
 
                         $el.html('');
 
-                        for (i=0; i<params.length; i++) {
+                        for ( i=0 ; i < params.length; i++) {
                             opt = params[i];
                             $el.append('<option value="' + opt.value + '" data-subtext="' + opt.subtext + '">' + (opt.innerHTML ? opt.innerHTML : opt.value) + '<option>');
                         }
@@ -258,10 +280,12 @@
                     $el.find('option').each(function(idx) {
 
                         var $this = $(this),
-                            txt = $this.text(),
+                            txt = $this.attr('data-main-text') ? $this.attr('data-main-text') : $this.text(),
                             elID = self.jqElem.attr('id') || self.jqElem.attr('name') || null,
                             idBase = (elID + '-' + $this.val() + '-' + idx).replace(/[^A-Za-z0-9]+/g, '-'),
                             id = self.uid(idBase),
+                            mainClass = $el.attr('data-ds-main-class') ? $el.attr('data-ds-main-class') : 'main',
+                            subtextClass = $el.attr('data-ds-subtext-class') ? $el.attr('data-ds-subtext-class') : 'sub',
                             triggerId = self.uid(id + '-trigger'),
                             val = $this.attr('value') === undefined ? '' : $this.attr('value'),     // $el.val() returns $el.text() if value attr is missing
                             sel = $el.attr('data-selected') === undefined ? '' : $el.attr('data-selected');   // being consistent
@@ -272,13 +296,14 @@
                                 '<li id="' + id + '" ' +
                                     'class="input btn-dd-option catch-dropdown-item">' +
                                     // this add connection thing is BS
-                                    '<a class="catch-dropdown-link' + (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
-                                       'id="' + triggerId + '"' +
-                                       'href="" ' +
-                                       'tabindex="-1" ' +
-                                       'data-value="' + val + '">' +
-                                        '<span class="main">' + txt + '</span>' +
-                                        ($this.data('subtext') ? '<span class="sub">' + $this.data('subtext') + '</span>' : '') +
+                                    '<a class="catch-dropdown-link' +
+                                        (txt == 'Add Connection' ? ' btn--add btn--icon icon-add icon-after' : '') + (sel == val ? ' selected' : '') + '" ' +
+                                        'id="' + triggerId + '"' +
+                                        'href="" ' +
+                                        'tabindex="-1" ' +
+                                        'data-value="' + val + '">' +
+                                        '<span class="' + mainClass + '">' + txt + '</span>' +
+                                        ($this.data('subtext') ? '<span class="' + subtextClass + '">' + $this.data('subtext') + '</span>' : '') +
                                     '</a>' +
                                 '</li>'
                             );
@@ -328,11 +353,11 @@
                     self.updateAttrs();
                     $el.trigger('change');
                     $(this).removeClass('error');
-                    $par.find('.btn-dd-select .main').first().text($sel.text() || $el.data('placeholder') || '');
-                    if ($par.find('.btn-dd-select .sub').length == 0) {
-                        $par.find('.btn-dd-select').append('<span class="sub"></span>')
+                    $par.find('.btn-dd-select .' + mainClass).first().text($sel.attr('data-main-text') || $sel.text() || $el.data('placeholder') || '');
+                    if ($par.find('.btn-dd-select .' + subtextClass).length == 0) {
+                        $par.find('.btn-dd-select').append('<span class=' + subtextClass + '></span>')
                     }
-                    $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                    $par.find('.btn-dd-select .' + subtextClass).first().text($sel.data('subtext') || $el.data('subtext') || '');
 
                     // When clicking on the outer button thing, make it open and close the menu
                     $par.find('.btn-dd').off('click.droposaur').on('click.droposaur', function(e) {
@@ -366,11 +391,11 @@
 
                         self.updateAttrs();
 
-                        $par.find('.btn-dd-select .main').first().text($(this).find('.main').text());
-                        if ($par.find('.btn-dd-select .sub').length == 0) {
-                            $par.find('.btn-dd-select').append('<span class="sub"></span>')
+                        $par.find('.btn-dd-select .' + mainClass).first().text($(this).find('.' + mainClass).text());
+                        if ($par.find('.btn-dd-select .' + subtextClass).length == 0) {
+                            $par.find('.btn-dd-select').append('<span class="' + subtextClass + '"></span>')
                         }
-                        $par.find('.btn-dd-select .sub').first().text($el.data('subtext') || $sel.data('subtext') || '');
+                        $par.find('.btn-dd-select .' + subtextClass).first().text($el.data('subtext') || $sel.data('subtext') || '');
 
                         // reactjs compatibility
                         if ($el.attr('data-droposaur-firenative') && self.options.jsxHandling) {
@@ -396,7 +421,7 @@
                         $(this).closest('.catch-dropdown').removeClass('error');
                         $('html').removeClass('s-dd-active');
                         $.scrollElem(true).removeClass('no-overflow');
-                        $par.find('.btn-dd').toggleClass('active').find('a').first().addClass('populated');
+                        $par.find('.btn-dd').removeClass('active').find('a').first().addClass('populated');
                     });
 
                 });
