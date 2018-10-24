@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://gl.catch.co.nz/catch/droposaurus"
+    "url": "http://gl.catchdesign.co.nz/catch/droposaurus"
   },
   "devDependencies": {
     "uglify-js": "2.4.15"
@@ -24,6 +24,6 @@
   "author": "Sam Dogg, AzT3K, DJ 'gold-standard' West",
   "license": "MIT",
   "bugs": {
-    "url": "http://gl.catch.co.nz/catch/droposaurus/issues"
+    "url": "http://gl.catchdesign.co.nz/catch/droposaurus/issues"
   }
 }

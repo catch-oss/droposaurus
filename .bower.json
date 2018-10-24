@@ -2,7 +2,7 @@
   "name": "droposaurus",
   "version": "0.2.9",
   "repo": "catch/droposaurus",
-  "homepage": "http://gl.catch.co.nz/catch/droposaurus",
+  "homepage": "http://gl.catchdesign.co.nz/catch/droposaurus",
   "description": "An enormous dropdown replacement library",
   "keywords": [
     "height",
@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "jquery": "~1.11.1",
-    "body-toucher": "git@gl.catch.co.nz:catch/body-toucher.git"
+    "body-toucher": "git@gl.catchdesign.co.nz:catch/body-toucher.git"
   },
   "main": "dropasaurus.js",
   "development": {},
@@ -26,7 +26,7 @@
     "tag": "0.2.9",
     "commit": "0d689f6f809f8473f4c7ae3c33047ac6336b0a0d"
   },
-  "_source": "git@gl.catch.co.nz:catch/droposaurus.git",
+  "_source": "git@gl.catchdesign.co.nz:catch/droposaurus.git",
   "_target": "*",
-  "_originalSource": "git@gl.catch.co.nz:catch/droposaurus.git"
+  "_originalSource": "git@gl.catchdesign.co.nz:catch/droposaurus.git"
 }
