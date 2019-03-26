@@ -56,7 +56,9 @@
                         mainClass = $this.attr('data-ds-main-class') ?
                             $this.attr('data-ds-main-class') : 'main',
                         subtextClass = $this.attr('data-ds-subtext-class') ?
-                            $this.attr('data-ds-subtext-class') : 'sub';
+                            $this.attr('data-ds-subtext-class') : 'sub',
+                        placeholderClass = $this.attr('data-ds-placehold-class') ?
+                            $this.attr('data-ds-placehold-class') : 'btn-dd-placeholder';
 
                     // only do selects
                     if (
@@ -79,7 +81,7 @@
                                                 '</span>' +
                                                 '<div class="btn-dd">' +
                                                     '<a href="" id="' + id + '" class="input btn-dd-select phone-type icon-chevron-fat-down' + ($el.attr('data-selected') ? ' populated' : '') + '" tabindex="0">' +
-                                                    '<span class="' + mainClass + '"' +
+                                                    '<span class="' + mainClass + ' ' + placeholderClass + '"' +
                                                         ( $el.data('placeholder-color') ? (' style="color:' + $el.data('placeholder-color') + '"') : '' ) +
                                                         '>' + $el.data('placeholder') + '</span>' +
                                                     ($el.data('subtext') ? ("<span class='" + subtextClass + "'>" + $el.data('subtext') + "</span>") : "") + '</a>' +
@@ -243,6 +245,8 @@
                     self = this,
                     mainClass = $el.attr('data-ds-main-class') ? $el.attr('data-ds-main-class') : 'main',
                     subtextClass = $el.attr('data-ds-subtext-class') ? $el.attr('data-ds-subtext-class') : 'sub',
+                    placeholderClass = $el.attr('data-ds-placehold-class') ?
+                        $el.attr('data-ds-placehold-class') : 'btn-dd-placeholder',
                     $sel,
                     opt,
                     i;
@@ -387,11 +391,13 @@
                         e.preventDefault();
                         e.stopPropagation();
 
-                        var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true);
+                        var $sel = $el.find('option[value="' + $(this).data('value') + '"]').prop('selected', true),
+                            $selectedSection = $par.find('.btn-dd-select .' + mainClass).first();
 
                         self.updateAttrs();
 
-                        $par.find('.btn-dd-select .' + mainClass).first().text($(this).find('.' + mainClass).text());
+                        $selectedSection.text($(this).find('.' + mainClass).text())
+                            .removeClass(placeholderClass);
                         if ($par.find('.btn-dd-select .' + subtextClass).length == 0) {
                             $par.find('.btn-dd-select').append('<span class="' + subtextClass + '"></span>')
                         }
