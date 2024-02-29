@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://gl.catchdesign.co.nz/catch/droposaurus"
+    "url": "https://github.com/catch-oss/droposaurus"
   },
   "devDependencies": {
     "uglify-js": "2.6.0"
   },
   "dependencies": {
-    "body-toucher": "git+ssh://git@gl.catchdesign.co.nz:catch/body-toucher.git#master",
+    "body-toucher": "git+https://github.com/catch-oss/body-toucher.git#master",
     "jquery": ">=1.12.0"
   },
   "keywords": [
@@ -28,6 +28,6 @@
   "author": "Sam Dogg, AzT3K, DJ 'gold-standard' West",
   "license": "MIT",
   "bugs": {
-    "url": "http://gl.catch.co.nz/catch/droposaurus/issues"
+    "url": "https://github.com/catch-oss/issues"
   }
 }
