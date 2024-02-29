@@ -11,7 +11,7 @@
     "url": "http://gl.catchdesign.co.nz/catch/droposaurus"
   },
   "devDependencies": {
-    "uglify-js": "2.4.15"
+    "uglify-js": "2.6.0"
   },
   "dependencies": {
     "body-toucher": "git+ssh://git@gl.catchdesign.co.nz:catch/body-toucher.git#master",
