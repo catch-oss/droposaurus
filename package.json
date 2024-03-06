@@ -14,7 +14,7 @@
     "uglify-js": "2.6.0"
   },
   "dependencies": {
-    "body-toucher": "git+https://github.com/catch-oss/body-toucher.git#master",
+    "body-toucher": "https://github.com/catch-oss/body-toucher.git#master",
     "jquery": ">=1.12.0"
   },
   "keywords": [
